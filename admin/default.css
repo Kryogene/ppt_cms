@@ -1,0 +1,1285 @@
+/* Site Container & Body w/ other pre-defines*/
+.container
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	
+	width: 99%;
+	padding: 3px;
+	padding-top: 90px;
+
+	margin: 0 auto 0 auto;
+	
+	/*Minimum screen parameters */
+	min-width: 800px;
+	min-height: 600px;
+}
+
+main section .titleBar
+{
+
+	min-height: 25px;
+    padding: 5px;
+	margin-top: 1px;
+	padding-left: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #c6c6c6;
+    background: -webkit-linear-gradient(#8AC1CA, #ebebeb); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #ebebeb); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #ebebeb); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #ebebeb); /* Standard syntax */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#8AC1CA', endColorstr='#ebebeb'); /* IE */
+	    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+	
+    text-align: left;
+	font-size: 16px;
+}
+
+body
+{
+	background-color: #5F7277;
+
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: right bottom;
+	font-family: verdana;
+    font-size: 14px;
+	
+	color: #000000;
+}
+
+p
+{
+	padding: 1em;
+}
+
+a{ cursor: pointer; font-weight: bold; border:0px; }
+a:hover {color:#d80000; text-decoration:none;}  /* mouse over link */
+a:link {color:#000000; text-decoration:none;}      /* unvisited link */
+a:visited {color:#000000; text-decoration:none;}  /* visited link */
+a:hover {color:#d80000; text-decoration:none;}  /* mouse over link */
+a:active {color:#d80000; text-decoration:none;}  /* selected link */
+a > img{
+    border: 0;
+}
+
+/* Site Forms */
+input:focus{
+    outline:none;
+}
+input
+{
+    margin: 3px;
+    background: -webkit-linear-gradient(#8AC1CA, #f9f9f9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #f9f9f9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #f9f9f9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #f9f9f9); /* Standard syntax */
+    height: 25px;
+    min-width: 40px;
+    padding: 5px;
+    -moz-border-radius:10px; /* Firefox */
+    -webkit-border-radius: 10px; /* Safari, Chrome */
+    -khtml-border-radius: 10px; /* KHTML */
+    border-radius: 10px; /* CSS3 */
+    color: #000000;
+    border: 1px solid #6c6c6c;
+    font-weight: bold;
+
+}
+input[type="number"]
+{
+	font-size: 14px;
+    height: 15px;
+    width: 75px;
+    padding: 5px;
+}
+input[type="radio"], input[type="checkbox"]
+{
+    height: 15px;
+    width: 15px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -khtml-border-radius: 0px; /* KHTML */
+
+}
+input[type="text"], input[type="password"]
+{
+	font-size: 14px;
+    height: 15px;
+    width: 175px;
+}
+
+input[type="submit"], input[type="button"]
+{
+	font-size: 13px;
+	padding: 0px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+textarea:focus{
+    outline:none;
+}
+textarea
+{
+		display: block;
+	font-size: 14px;
+    width: 90%;
+		height: 200px;
+    background-color: #fafafa;
+    color: #000000;
+    border: 1px solid #6c6c6c;
+    font-weight: bold;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px; /* KHTML */
+    -moz-box-shadow: 2px 2px 3px #000000;
+    -webkit-box-shadow: 2px 2px 3px #000000;
+    box-shadow: 2px 2px 3px #000000;
+
+}
+select:focus{
+    outline:none;
+}
+select
+{
+	padding: 5px;
+	margin: 3px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px; /* KHTML */
+    height: 30px;
+    min-width: 50px;
+    background: -webkit-linear-gradient(#8AC1CA, #f9f9f9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #f9f9f9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #f9f9f9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #f9f9f9); /* Standard syntax */
+    color: #000000;
+    border: 1px solid #6c6c6c;
+    font-size: 14px;
+    font-weight: bold;
+
+}
+select > option
+{
+	font-size: 14px;
+    background: #e3f3dd;
+    border: 1px solid #eaeaea;
+}
+
+nav.loginNav
+{
+	position: fixed;
+	z-index:  10;
+	top: 0;
+	left: 4px;
+	width: 99%;
+	height: 50px;
+	
+	border: 3px solid #6c6c6c;
+	border-top: 0px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	-moz-border-bottom-left-radius: 10px;
+    -webkit-border-bottom-left-radius: 10px;
+    -khtml-border-bottom-left-radius: 10px; /* KHTML */
+	background-color: rgba(79, 194, 206, 0.9);
+	
+    -moz-box-shadow: 3px 3px 5px #000000;
+    -webkit-box-shadow: 3px 3px 5px #000000;
+    box-shadow: 3px 3px 5px #000000;
+	
+	font-weight: bold;
+	 
+	min-width: inherit;
+}
+
+nav .userLogin
+{
+	position: relative;
+	  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+	min-height: 40px;
+	float: left;
+	text-align: left;
+	margin-left: 10px;
+	margin-top: 5px;
+}
+
+nav .navWelcome
+{
+	position: relative;
+	  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+	max-height: 40px;
+	text-align: left;
+	margin-left: 10px;
+}
+
+nav .socialLinks
+{
+	max-height: 40px;
+	float: right;
+	text-align: right;
+	margin-right: 5px;
+	margin-top: 4px;
+}
+
+nav .userNavOption
+{
+
+	position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+	max-height: 40px;
+	float: right;
+	text-align: right;
+	margin-right: 10px;
+	font-size: 11px;
+}
+
+nav .navLink
+{
+	height: 20px;
+	width: 20px;
+}
+
+nav .navALink
+{
+	height: 20px;
+	width: 64px;
+}
+	
+
+#settingsIcon
+{
+	background-image: url("images/templates/default/icons/settings.png");
+}
+
+#settingsIcon:hover
+{
+	background-image: url("images/templates/default/icons/settings_hover.png");
+}
+
+#userPanelIcon
+{
+	background-image: url("images/templates/default/icons/userpanel.png");
+}
+
+#userPanelIcon:hover
+{
+	background-image: url("images/templates/default/icons/userpanel_hover.png");
+}
+
+#mailIcon
+{
+	background-image: url("images/templates/default/icons/mail.png");
+}
+
+#mailIcon:hover
+{
+	background-image: url("images/templates/default/icons/mail_hover.png");
+}
+
+#statisticsIcon
+{
+	background-image: url("images/templates/default/icons/statistics.png");
+}
+
+#statisticsIcon:hover
+{
+	background-image: url("images/templates/default/icons/statistics_hover.png");
+}
+
+#adminIcon
+{
+	background-image: url("images/templates/default/icons/admin.png");
+}
+
+#adminIcon:hover
+{
+	background-image: url("images/templates/default/icons/admin_hover.png");
+}
+
+nav .socialLinks img
+{
+	margin: 3px;
+	border-radius: 5px;
+	-moz-box-shadow: 3px 3px 5px #5e5e5e;
+    -webkit-box-shadow: 3px 3px 5px #5e5e5e;
+    box-shadow: 3px 3px 5px #5e5e5e;
+}
+
+/* Site Header Elements */
+
+header
+{
+	position: relative;
+	height: 300px;
+	max-height: 300px;
+	width: 100%;
+	padding: 2px;
+}
+
+header .headerImage
+{
+
+	margin: 0 auto 0 auto;
+	float: left;
+	background-image: url("images/templates/default/pptlogo.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 40%;
+	height: 250px;
+}
+
+header .quickNavigation
+{
+	margin: 0 auto 0 auto;
+	width: 40%;
+	float: left;
+	
+	font-size: 16px;
+	color: #000000;
+	font-weight: bold;
+}
+
+header span.chip
+{
+	display: inline-block;
+	padding: 25px;
+	
+	cursor: pointer;
+	background-repeat: no-repeat;
+	width: 75px;
+	height: 75px;
+	margin: 0 10px 0 10px;
+	vertical-align: middle;
+
+	text-align: center;
+}
+header span.chip div
+{
+	position: relative;
+	top: 50%;
+	  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+header span.chip:nth-child(even)
+{
+
+	background-image: url("images/templates/default/icons/nav/redChip.png?v=2");
+
+}
+
+header span.chip:nth-child(even):hover
+{
+	background-image: url("images/templates/default/icons/nav/blackChip.png?v=2");
+}
+
+header span.chip:nth-child(odd)
+{
+
+	background-image: url("images/templates/default/icons/nav/blackChip.png?v=2");
+
+}
+
+header span.chip:nth-child(odd):hover
+{
+	background-image: url("images/templates/default/icons/nav/redChip.png?v=2");
+}
+
+/* The Sites Main Section */
+main
+{
+
+	position: relative;
+	margin: 20px auto 20px auto;
+	padding: 10px;
+}
+
+.mainNavigation
+{
+	position: relative;
+	overflow: hidden;
+	z-index: 9;
+	padding-left: 5px;
+	
+	width: 20%;
+	max-width: 300px;
+	min-width: 200px;
+	min-height: 500px;
+	height: 95%;
+	float: left;
+	margin: 10px 15px 10px -3px;
+	
+	background-color: #fafafa;
+	
+	border: 1px solid #aaaaaa;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	border-left: 0px;
+	
+	-moz-box-shadow: 3px 3px 5px #000000;
+    -webkit-box-shadow: 3px 3px 5px #000000;
+    box-shadow: 3px 3px 5px #000000;
+	
+}
+
+
+.mainNavigation .titleBar
+{
+
+	margin-left: -4px;
+
+	min-height: 25px;
+    padding: 5px;
+	margin-top: 1px;
+	padding-left: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #c6c6c6;
+    background: -webkit-linear-gradient(#8AC1CA, #fafafa); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #fafafa); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #fafafa); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #fafafa); /* Standard syntax */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#8AC1CA', endColorstr='#fafafa'); /* IE */
+    border-top-right-radius: 20px;
+	
+    text-align: left;
+	font-size: 16px;
+}
+
+.mainNavigation div.cat
+{
+	max-width: 295px;
+	min-width: 190px;
+	width: 95%;
+	margin: 5px auto 5px auto;
+	padding: 5px;
+	
+	font-size: 14px;
+	font-weight: bold;
+	
+	background-color: #F1F1F1;
+	border-bottom: 1px solid #dddddd;
+	
+}
+
+.mainNavigation div.cat a
+{
+	font-weight: bold;
+}
+
+.mainNavigation a
+{
+	font-weight: normal;
+}
+
+.mainNavigation ul
+{
+	list-style: square url('../images/icons/bullets/arrows.png');
+	font-size: 11px;
+}
+
+.mainNavigation li
+{
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+main section
+{
+
+	width: 65%;
+	float: left;
+	margin: 20px 20px 20px 20px;
+	
+	min-width: 490px;
+	min-height: 300px;
+	
+	border: 1px solid #6c6c6c;
+	border-radius: 17px;
+	background-color: #ebebeb;
+	
+	color: #000000;
+	
+	-moz-box-shadow: 3px 3px 5px #000000;
+    -webkit-box-shadow: 3px 3px 5px #000000;
+    box-shadow: 3px 3px 5px #000000;
+	
+	overflow: hidden;
+}
+
+main section table
+{
+	padding: 1em;
+	width: 100%;
+
+}
+
+main section fieldset
+{
+	padding: 1em;
+	margin: 1em 5em 1em 5em;
+	
+	border: 0px;
+	border: 1px solid #666666;
+	border-radius: 15px;
+
+	 background: -webkit-linear-gradient(#ebebeb, #eeffeb); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#ebebeb, #eeffeb); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#ebebeb, #eeffeb); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#ebebeb, #eeffeb); /* Standard syntax */
+  
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ebebeb', endColorstr='#eeffeb'); /* IE */
+	
+}
+
+main section fieldset legend
+{
+	margin-left: 2em;
+	margin-right: 2em;
+	padding: 6px;
+	
+	border-left: 1px solid #666666;
+	border-right: 1px solid #666666;
+	border-radius: 5px;
+	
+	  background: -webkit-linear-gradient(#ebebeb, #8AC1CA, #ebebeb); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#ebebeb, #8AC1CA, #ebebeb); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#ebebeb, #8AC1CA, #ebebeb); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#ebebeb, #8AC1CA, #ebebeb); /* Standard syntax */
+  
+	
+	font-weight: bold;
+	font-size: 16px;
+	
+}
+
+main aside
+{
+
+	width: 25%;
+	float: left;
+	margin: 20px 20px 20px 20px;
+	
+	min-width: 290px;
+	
+	border: 1px solid #6c6c6c;
+	border-radius: 15px;
+	background-color: #ebebeb;
+	
+	color: #000000;
+	
+	-moz-box-shadow: 3px 3px 5px #000000;
+    -webkit-box-shadow: 3px 3px 5px #000000;
+    box-shadow: 3px 3px 5px #000000;
+}
+
+/* The Sites Footer Section */
+footer
+{
+
+	clear: both;
+
+	position: relative;
+	left: 2px;
+	bottom: 2px;
+	
+	padding: 5px;
+	
+	height: 125px;
+	
+	border: 1px solid #6c6c6c;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px; /* KHTML */
+	background-color: rgba(103, 180, 197, 0.3);
+	
+    -moz-box-shadow: 3px 3px 5px #000000;
+    -webkit-box-shadow: 3px 3px 5px #000000;
+    box-shadow: 3px 3px 5px #000000;
+	
+	font-weight: bold;
+	font-size: 12px;
+	 
+	min-width: inherit;
+}
+
+footer .socialLinks
+{
+	position: absolute;
+	float: right;
+	text-align: right;
+	bottom: 0;
+	right: 5px;
+}
+
+footer .socialLinks img
+{
+	margin: 3px;
+	border-radius: 5px;
+	-moz-box-shadow: 3px 3px 5px #5e5e5e;
+    -webkit-box-shadow: 3px 3px 5px #5e5e5e;
+    box-shadow: 3px 3px 5px #5e5e5e;
+}
+
+section article
+{
+	padding: 1em;
+}
+	
+/* Custom Form Elements */
+.formTextTitle
+{
+	font-weight: bold;
+	margin: 2px;
+}
+
+.debugMenu
+{
+	position: fixed;
+	z-index: 99;	
+	
+	bottom: 10px;
+	right: 10px;
+	
+	width: 600px;
+	height: 300px;
+
+	background-color: #ffffff;
+	border: 1px solid #000000;
+	border-radius: 15px;
+	border-bottom-right-radius: 0px;
+}
+
+.debugMenu .titleBar
+{
+	border-radius: 15px;
+	min-height: 25px;
+	padding: 5px;
+    background: -webkit-linear-gradient(#C1C8D6, #f9f9f9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#C1C8D6, #f9f9f9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#C1C8D6, #f9f9f9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#C1C8D6, #f9f9f9); /* Standard syntax */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#C1C8D6', endColorstr='#f9f9f9'); /* IE */
+}
+
+.debugMenu .debugCode
+{
+
+	position: relative;
+
+	padding: 5px;
+	padding-left: 10px;
+	height: 84%;
+		
+	overflow: auto;
+	
+}
+
+.alertMessage
+{
+	padding: 5px;
+}
+
+.alert
+{
+	position: relative;
+	display: block;
+	margin: 30px auto 30px auto;
+	float: middle;
+	width: 50%;
+
+	height: 0px;
+	
+	min-width:  300px;
+	min-height: 100px;
+	max-width: 800px;
+	max-height: 300px;
+	
+
+	border-radius: 15px;
+	
+	color: #000000;
+	
+	-moz-box-shadow: 3px 3px 5px #5e5e5e;
+    -webkit-box-shadow: 3px 3px 5px #5e5e5e;
+    box-shadow: 3px 3px 5px #5e5e5e;
+}
+
+.error
+{
+
+	background-color: #FFF7F7;
+	border: 1px solid #666666;
+	
+}
+
+.error .titleBar
+{
+	border-radius: 15px;
+	min-height: 25px;
+	padding: 5px;
+    background: -webkit-linear-gradient(#F5CECE, #f9f9f9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#F5CECE, #f9f9f9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#F5CECE, #f9f9f9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#F5CECE, #f9f9f9); /* Standard syntax */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#F5CECE', endColorstr='#f9f9f9'); /* IE */
+}
+
+.warning
+{
+
+	background-color: #FEFFF0;
+	border: 1px solid #dddddd;
+	
+}
+
+.warning .titleBar
+{
+	border-radius: 15px;
+	min-height: 25px;
+	padding: 5px;
+    background: -webkit-linear-gradient(#F2F279, #f9f9f9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#F2F279, #f9f9f9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#F2F279, #f9f9f9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#F2F279, #f9f9f9); /* Standard syntax */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#F2F279', endColorstr='#f9f9f9'); /* IE */
+}
+
+.success
+{
+
+	background-color: #FFF7F7;
+	border: 1px solid #666666;
+	
+}
+
+.success .titleBar
+{
+	border-radius: 15px;
+	min-height: 25px;
+	padding: 5px;
+    background: -webkit-linear-gradient(#b4eaac, #f9f9f9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#b4eaac, #f9f9f9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#b4eaac, #f9f9f9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#b4eaac, #f9f9f9); /* Standard syntax */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#b4eaac', endColorstr='#f9f9f9'); /* IE */
+}
+
+main section .settingsFormTable
+{
+	border-collapse: collapse;
+	width: 90%;
+	margin: 0 auto 0 auto;
+}
+
+main section .settingsFormTable td
+{
+	padding: 1em;
+}
+
+main section .settingsFormTable td:last-child
+{
+	text-align: right;
+	
+}
+
+main section .settingsFormTable tr
+{
+	border-bottom: 1px solid #999999;
+	
+}
+
+main section .settingsFormTable tr:last-child
+{
+	border: 0px;
+}
+
+main section .profileFormTable
+{
+	border-collapse: collapse;
+	width: 90%;
+	margin: 0 auto 0 auto;
+}
+
+main section .composeMailFormTable
+{
+	border-collapse: collapse;
+	width: 90%;
+	margin: 0 auto 0 auto;
+}
+
+main section .composeMailFormTable .composeMsg
+{
+	width: 90%;
+	height: 250px;
+}
+
+main section .profileFormTable td
+{
+	padding: 1em;
+}
+
+main section .profileFormTable td:last-child
+{
+	text-align: right;
+	
+}
+
+main section .profileFormTable tr
+{
+	border-bottom: 1px solid #999999;
+	
+}
+
+main section .profileFormTable tr:last-child
+{
+	border: 0px;
+}
+
+main section .mailBoxTable
+{
+	border: 1px solid #dddddd;
+	padding: 4px;
+	border-collapse: collapse;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+main section .mailBoxTable td
+{
+	padding: 5px;
+	text-align: left;
+	border-right: 1px solid #dddddd;
+	font-size: 12px;
+}
+
+main section .mailBoxTable th
+{
+	padding: 5px;
+	text-align: left;
+	border-right: 1px solid #dddddd;
+	font-size: 15px;
+	
+	background: -webkit-linear-gradient(#eeffeb, #8AC1CA, #eeffeb); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(#eeffeb, #8AC1CA, #eeffeb); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(#eeffeb, #8AC1CA, #eeffeb); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(#eeffeb, #8AC1CA, #eeffeb); /* Standard syntax */
+}
+
+main section .mailBoxTable.main td
+{
+	cursor: pointer;
+}
+
+main section .mailBoxTable th.selection
+{
+	width: 45px;
+}
+
+main section .mailBoxTable th.from
+{
+	width: 15%;
+}
+
+main section .mailBoxTable th.subject
+{
+	width: 25%;
+}
+
+main section .mailBoxTable th.message
+{
+	width: 60%;
+}
+
+main section .mailBoxTable tr
+{
+	border-bottom: 1px solid #dddddd;
+}
+
+main section .mailBoxTable tr:hover
+{
+	background-color: #dffbd6;
+}
+
+main section .mailBoxTable tr:last-child
+{
+	border: 0px;
+}
+
+main section .mailBoxTable .unread
+{
+	font-weight: bold;
+}
+
+main section .mailBoxTable .noMessages
+{
+	width: 100%;
+	font-style: italic;
+	text-align: center;
+}
+
+main section .mailBoxTable span.mailText
+{
+	font-weight: bold;
+	font-size: 14px;
+}
+
+main section .mailBoxToolbar
+{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+main section .mailBoxToolbar #delete
+{
+	float: right;
+}
+
+main section .searchBox
+{
+	width: 95%;
+	text-align: center;
+	margin: 15px auto 15px auto;
+    padding-top: 15px;
+    padding-bottom: 15px;
+	border: 1px solid #cccccc;
+	border-radius: 15px;
+	-moz-box-shadow: 3px 3px 5px #000000;
+    -webkit-box-shadow: 3px 3px 5px #000000;
+    box-shadow: 3px 3px 5px #000000;
+}
+
+main section .searchBox input[type="text"]
+{
+	width: 50%;
+	min-width: 250px;
+}
+
+main section .venueTable
+{
+
+	width: 95%;
+	padding: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 12px;
+}
+main section .venueTable tr:nth-last-child(1) td
+{
+border-bottom: 1px solid #cccccc;
+}
+main section .venueTable td
+{
+min-width: 50px;
+max-width: 150px;
+border-right: 1px solid #cccccc;
+border-radius: 10px;
+padding: 10px;
+font-weight: bold;
+background: rgba(255,255,255,0.5);
+}
+main section .venueTable td:nth-child(1)
+{
+border-left: 1px solid #cccccc;
+}
+main section .venueTable td:hover
+{
+background: rgba(228,243,255,0.5);
+cursor: pointer;
+}
+
+main section .publicVenueTable
+{
+
+	width: 95%;
+	padding: 0px;
+	border-spacing: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #cccccc;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+main section .publicVenueTable th
+{
+	font-size: 16px;
+	text-align: left;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-top: 1px solid #eeeeee;
+	border-right: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	background: -webkit-linear-gradient(#8AC1CA, #ebebeb); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #ebebeb); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #ebebeb); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #ebebeb); /* Standard syntax */
+}
+main section .publicVenueTable tr:nth-last-child(1) td
+{
+border-bottom: 1px solid #eeeeee;
+padding-left: 20px;
+padding-top: 20px;
+padding-bottom: 20px;
+}
+main section .publicVenueTable td
+{
+
+border-right: 1px solid #eeeeee;
+padding: 10px;
+background: rgba(255,255,255,0.5);
+}
+
+
+main section .publicVenueTable td:nth-child(1)
+{
+border-left: 1px solid #eeeeee;
+width: 20%;
+}
+main section .publicVenueTable td:hover
+{
+background: rgba(228,243,255,0.5);
+}
+
+main section .tournamentTable
+{
+
+	width: 95%;
+	padding: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 12px;
+}
+main section .tournamentTable tr:nth-last-child(1) td
+{
+border-bottom: 1px solid #cccccc;
+}
+main section .tournamentTable td
+{
+min-width: 100px;
+width: 33%;
+border-right: 1px solid #cccccc;
+border-radius: 10px;
+padding: 10px;
+font-weight: bold;
+background: rgba(255,255,255,0.5);
+}
+main section .tournamentTable td:nth-child(1)
+{
+border-left: 1px solid #cccccc;
+}
+main section .tournamentTable td:hover
+{
+background: rgba(228,243,255,0.5);
+cursor: pointer;
+}
+
+main section .publicTournamentTable
+{
+
+	width: 95%;
+	padding: 0px;
+	border-spacing: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #cccccc;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+main section .publicTournamentTable th
+{
+	font-size: 16px;
+	text-align: left;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-top: 1px solid #eeeeee;
+	border-right: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	background: -webkit-linear-gradient(#8AC1CA, #ebebeb); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #ebebeb); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #ebebeb); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #ebebeb); /* Standard syntax */
+}
+main section .publicTournamentTable tr:nth-last-child(1) td
+{
+border-bottom: 1px solid #eeeeee;
+padding-left: 20px;
+padding-top: 20px;
+padding-bottom: 20px;
+}
+main section .publicTournamentTable td
+{
+
+border-right: 1px solid #eeeeee;
+padding: 10px;
+background: rgba(255,255,255,0.5);
+}
+
+
+main section .publicTournamentTable td:nth-child(1)
+{
+border-left: 1px solid #eeeeee;
+width: 20%;
+}
+main section .publicTournamentTable td:hover
+{
+background: rgba(228,243,255,0.5);
+}
+
+main section .userForm
+{
+	margin: 10px auto 10px auto;
+	width: 95%;
+	text-align: left;
+}
+
+main section .userForm td
+{
+	padding: 1em;
+}
+
+main section .userForm td:nth-child(2)
+{
+	text-align: right;
+}
+
+main section .userForm tr:last-child
+{
+	text-align: right;
+}
+
+main section .haveLoginTxt
+{
+	margin-left: 3em;
+	font-size: 11px;
+	font-style: italic;
+}
+
+main section .needAccountTxt
+{
+	margin-left: 3em;
+	font-size: 11px;
+	font-style: italic;
+}
+
+main section .settingsTable
+{
+	width: 90%;
+	padding: 5px;
+	margin: 0 auto 0 auto;
+	border-collapse: collapse;
+}
+main section .settingsTable td
+{
+	padding: 7px;
+}
+main section .settingsTable tr
+{
+	
+	border-bottom: 1px solid #000000;
+}
+
+main section .search_table
+{
+	width: 95%;
+	margin: 25px auto 25px auto;
+	padding: 3px;
+	border-collapse: collapse;
+}
+main section .search_table tr
+{
+	border-bottom: 1px solid #aaaaaa;
+}
+main section .search_table th
+{
+		background: -webkit-linear-gradient(#8AC1CA, #ebebeb); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #ebebeb); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #ebebeb); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #ebebeb); /* Standard syntax */
+	padding: 5px;
+	border-right: 1px solid #aaaaaa;
+}
+main section .search_table td
+{
+	padding: 5px;
+	border-right: 1px solid #aaaaaa;
+}
+main section .search_table td:hover
+{
+	background: rgba(200, 200, 200, 0.5);
+}
+main section div.confirm
+{
+	width: 90%;
+	padding: 3px;
+	margin: 5px auto 5px auto;
+	text-align: center;
+	border: 1px solid #adadad;
+	border-radius: 5px;
+}
+.statisticTable
+{
+	width: 100%;
+	border-collapse: collapse;
+}
+.statisticTable tr
+{
+	border-bottom: 1px solid #cccccc;
+}
+.statisticTable td,th
+{
+		padding-top: 5px;
+	padding-bottom: 5px;
+}
+.bodyBox
+{
+		width: 95%;
+	text-align: center;
+	margin: 15px auto 15px auto;
+    padding-top: 15px;
+    padding-bottom: 15px;
+	border: 1px solid #cccccc;
+	border-radius: 15px;
+	-moz-box-shadow: 3px 3px 5px #000000;
+    -webkit-box-shadow: 3px 3px 5px #000000;
+    box-shadow: 3px 3px 5px #000000;
+}
+.bodyBox input[type="text"], input[type="password"]
+{
+	font-size: 14px;
+    height: 15px;
+    width: 75px;
+}
+.bodyBox div
+{
+	text-align: left;
+}
+
+span.no_backup
+{
+	color: #ff1e1e;
+	font-weight: bold;
+}
