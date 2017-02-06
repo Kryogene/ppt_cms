@@ -30,6 +30,8 @@ class Init
 		*/
 		$this->_Core = CMS_Core::getInstance();
 		
+		$this->_Core->checkSSL();
+		
 		$this->_Core->getLoginUser();
 		/*
 		* Get the Page Instance or produce caught error.
@@ -48,7 +50,7 @@ class Init
 		* Now let's fire off the pages preset handlers.
 		*/
 
-		$this->_Page->firePresetHandlers();
+		$this->_Page->run();
 
 		/*
 		* Get  the Template Instance or produce caught error.
@@ -67,7 +69,10 @@ class Init
 		{
 			try
 			{
-				$this->_Core->output();
+				if($this->_Core->Settings['online'] || (!$this->_Core->Settings['online'] && (User::isUserType($this->_Core->User->id) == 1)))
+					$this->_Core->output();
+				else
+					$this->_Core->offline();
 			}
 			catch(Exception $e)
 			{

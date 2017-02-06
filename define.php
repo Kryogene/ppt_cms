@@ -74,5 +74,9 @@ if( !defined( "VENUE_IMAGES" ) )
 if( !defined( "DEFAULT_IMG" ) )
 	define ( "DEFAULT_IMG", "no_img.jpg" );
 
+
+if( !defined( "SMALL_IMAGE_EXT" ) )
+	define( "SMALL_IMAGE_EXT", "_small" );
+
 	
 ?>

@@ -3,6 +3,8 @@
 class CMS_Core
 {
 
+	public static $hash = "1qz23MnZ9";
+	
 	/* Printable Loaders */
 	private $_HTML = "";
 	public $DEBUG = "";
@@ -59,6 +61,22 @@ class CMS_Core
 			{
 				$results = $query->fetch_assoc();
 				return $results['lastName'] . ", " . $results['firstName'];
+			}
+		else
+			return 0;
+	}
+	
+	public function getMailNameByID( $id )
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		
+		$query = $SQL->query("SELECT `lastName`, `firstName` FROM `players` WHERE `id` = '" . $SQL->escape_string( $id ) . "'");
+		if($query)
+			if($query->num_rows > 0)
+			{
+				$results = $query->fetch_assoc();
+				return $results['firstName'] . "." . $results['lastName'] . "." . $id;
 			}
 		else
 			return 0;
@@ -156,6 +174,39 @@ HTML;
 		$alert = ($Page->isAlert()) ? $Template->wrapAlertData( $Page->getAlert() ) : "";
 		$body .= $Template->Skin['globals']->bodyMain( $section, "", $alert);
 			
+		$body .= $Template->Skin['globals']->bodyFooter($this->Settings);
+		
+		$this->_HTML .= $Template->Skin['globals']->Shell($body);
+		
+		$this->_HTML .= $Template->Skin['globals']->Footer();
+		
+		$this->DEBUG[] = "Site Successfully Built!";
+		
+	}
+	
+	private function _build_offline()
+	{
+		$Template = Template::getInstance();
+		$Page = Page::getInstance();
+		
+		$this->DEBUG[] = "Building Site...";
+	
+		$header = $this->_setHeader();
+		$this->_HTML = $Template->Skin['globals']->Header($header);
+		
+		$body = $Template->Skin['globals']->bodyNav( $Template->getNavigationElements() );
+		
+		$body .= $Template->Skin['globals']->bodyHeader();
+		
+		$this->User->retrieveStatistics();
+
+		$section = array( "title" => "Login",
+										 "content" => $Template->Skin['login']->sectionLoginForm()
+										 );
+		$alert = ($Page->isAlert()) ? $Template->wrapAlertData( $Page->getAlert() ) : "";
+		
+		$body .= $Template->Skin['globals']->offlineBodyMain( $section, "", $alert);
+			
 		$body .= $Template->Skin['globals']->bodyFooter();
 		
 		$this->_HTML .= $Template->Skin['globals']->Shell($body);
@@ -188,7 +239,7 @@ HTML;
 		$header .= $Template->Skin['globals']->MetaProperty("og:url", $this->Settings['defaultURL']) . "\n";
 		$header .= $Template->Skin['globals']->MetaProperty("og:image",$Page->Image) . "\n";
 		$header .= $Template->Skin['globals']->jQuery() . "\n";
-		$header .= $Template->Skin['globals']->Link("stylesheet", "text/css", "default.css") . "\n";
+		$header .= $Template->Skin['globals']->Link("stylesheet", "text/css", $Template->getStyleSheet()) . "\n";
 		
 		$this->DEBUG[] = "Header Elements Set Successfully!";
 		
@@ -206,6 +257,12 @@ HTML;
 	public function error_output($e)
 	{
 		$this->_build_with_error($e);
+		print $this->_HTML;
+	}
+	
+	public function offline()
+	{
+		$this->_build_offline();
 		print $this->_HTML;
 	}
 				
@@ -272,6 +329,23 @@ HTML;
 			if( strtolower( $string ) == strtolower( $value ) ) return $key;
 			
 		return 0;
+	}
+	
+	public function checkSSL()
+	{
+		/* Not accessible yet.
+		if($_SERVER["HTTPS"] != "on")
+		{
+    header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+    exit();
+		}*/
+	}
+	
+	public function parentDirectory()
+	{
+		$var = explode("/", $_SERVER['PHP_SELF']);
+		array_pop($var);
+		return implode("/", $var);
 	}
 				
 }
