@@ -8,6 +8,7 @@ class User
 	public $id;
 	public $fullName;
 	public $lastFirst;
+	public $Settings;
 	
 	protected $_Data;
 	
@@ -33,6 +34,13 @@ class User
 		}
 		
 		$Data = $query->fetch_assoc();
+		
+				
+		$query = $SQL->query("SELECT `template_id`
+															FROM `player_settings`
+															WHERE `player_id` = '{$id}'");
+		$this->Settings = $query->fetch_assoc();
+		
 		
 		$this->DEBUG[] = "Data Retrieved!";
 		
