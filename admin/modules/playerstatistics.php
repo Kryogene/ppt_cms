@@ -301,5 +301,19 @@ class PlayerStatistics
 		}
 	}
 	
+	public static function deleteAll($id)
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		$Page = Page::getInstance();
+		
+		$q_str = "DELETE FROM `player_statistics` WHERE `player_id` = '{$id}'";
+		$query = $SQL->query($q_str);
+		if($query)
+			return TRUE;
+		else
+			return FALSE;
+	}
+	
 }
 ?>

@@ -86,6 +86,27 @@ HTML;
 		return $HTML;
 	}
 
+		
+	function loggedIn()
+	{
+		$HTML = <<<HTML
+		<div class="light dialog">
+			<p>
+				<span class="small">You will be redirected shortly...</span>
+			</p>
+		</div>
+		<script>
+    window.setTimeout(function(){
+
+        // Redirect
+        window.location = "index.php?p=home";
+
+    }, 3000);
+		</script>
+HTML;
+		return $HTML;
+	}
+	
 }
 
 ?>

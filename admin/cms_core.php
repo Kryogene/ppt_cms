@@ -3,6 +3,8 @@
 class CMS_Core
 {
 
+	public static $hash = "1qz23MnZ9";
+	
 	/* Printable Loaders */
 	private $_HTML = "";
 	public $DEBUG = "";
@@ -309,6 +311,16 @@ HTML;
 			if( strtolower( $string ) == strtolower( $value ) ) return $key;
 			
 		return 0;
+	}
+	
+	public function checkSSL()
+	{
+		/* Not accessible yet.
+		if($_SERVER["HTTPS"] != "on")
+		{
+    header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+    exit();
+		}*/
 	}
 				
 }

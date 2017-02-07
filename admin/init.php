@@ -30,6 +30,9 @@ class Init
 		*/
 		$this->_Core = CMS_Core::getInstance();
 		
+		// Make sure we have a secure connection!
+		$this->_Core->checkSSL();
+		
 		include_once ("../modules/login.php");
 		
 		$this->_Core->getLoginUser();
@@ -53,7 +56,10 @@ class Init
 		if(is_a( $this->_Core->User, "Administrator" ))
 			$this->_Page->firePresetHandlers();
 		else
-			$this->_Page->setLoginSection();
+			if(isset($_GET['login']))
+				$this->_Page->firePresetHandlers();
+			else
+				$this->_Page->setLoginSection();
 
 		/*
 		* Get  the Template Instance or produce caught error.

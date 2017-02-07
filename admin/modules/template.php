@@ -47,6 +47,7 @@ class Template
 		$this->loadSkin("login");
 		$this->loadSkin("users");
 		$this->loadSkin("search");
+		$this->loadSkin("tools");
 		
 	}
 	
@@ -171,25 +172,25 @@ class Template
 	{
 	
 		$Categories = array ( "Main" 			=> array(	"Settings" 				=> "index.php?settings",
-																								"Site Backup"			=> "index.php?backup",
-																								"Calendar"				=> "index.php?calendar",
-																								"Admin Logs"			=> "index.php?adminlogs"),
+																								"Site Backup"			=> "index.php?backup"),
 								"Users"			=> array(						"Search"					=> "index.php?cat=users&search",
-																								"Groups"					=> "index.php?cat=users&groups",
-																								"Email"						=> "index.php?cat=users&email"),
+																								"Create"					=> "index.php?cat=users&create",
+												 												"Tools"						=> "index.php?cat=users&tools"),
 								"Announcements" => array(				"Create" 					=> "index.php?cat=announcements&create", 
 																								"Search" 					=> "index.php?cat=announcements&search"), 
 								"Statistics"	=> array(					"Search Statistics"	=> "index.php?cat=statistics&search",
-																								"Add Statistics" 	=> "index.php?cat=statistics&add",
-																								"Formulas"	=> "index.php?cat=statistics&formulas"),
+																			 					"Search Unique"		=> "index.php?cat=statistics&search&group_by=date,venue",
+																								"Add Statistics" 	=> "index.php?cat=statistics&add"),
 								"Venues"		=> array(						"Add"							=> "index.php?cat=venues&add",
 																								"Search"					=> "index.php?cat=venues&search"),
 								"Tournaments"	=> array(					"Add"							=> "index.php?cat=tournaments&add",
 																								"Search"					=> "index.php?cat=tournaments&search"),
-								"Gallery" 		=> array(					"Create Album" 		=> "index.php", 
-																								"Modify Album"		=> "index.php",
-																								"Upload Photo"	 	=> "index.php", 
-																								"Edit Photo" 			=> "index.php"), 
+								"Gallery" 		=> array(					"Create Album" 		=> "index.php?cat=gallery&albums&create", 
+																								"Search Albums"		=> "index.php?cat=gallery&albums&search",
+																								"Upload Photo"		=> "index.php?cat=gallery&photos&upload", 
+																								"Search Photos" 	=> "index.php?cat=gallery&photos&search"),
+								"Pages"				=> array(					"Create"					=> "index.php?cat=pages&create",
+																								"Search"					=> "index.php?cat=pages&search"),
 								"Templates" 	=> array(					"Test" 						=> "index.php", 
 																								"Test" 						=> "index.php") );
 		
@@ -302,7 +303,7 @@ class Template
 		$db = Database::getInstance();
 		$SQL = $db->getConnection();
 		$html = "";
-		$qry_str = "SELECT id, lastName, firstName FROM `players` ORDER BY `lastName` ASC";
+		$qry_str = "SELECT id, lastName, firstName FROM `players` WHERE `id` != 0 ORDER BY `lastName` ASC";
 		$query = $SQL->query($qry_str);
 		while($result = $query->fetch_assoc())
 		{
@@ -317,7 +318,9 @@ class Template
 	
 	public function convertToForm( $data, $types)
 	{
-		$builder = new FormBuilder( $this );
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		$builder = new FormBuilder( $this, $SQL );
 		return $builder->buildByType($data, $types);
 	}
 	
@@ -339,6 +342,21 @@ class Template
 			return 0;
 	}
 			
+	public static function defaultTemplate()
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		
+		$q_str = "SELECT `id` FROM `templates` WHERE `default` = '1'";
+		$query = $SQL->query($q_str);
+		if($query->num_rows > 0)
+		{
+			$result = $query->fetch_row();
+			return $result[0];
+		}
+		else
+			return 1;
+	}
 	
 }
 

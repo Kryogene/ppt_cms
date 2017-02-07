@@ -8,6 +8,9 @@ if( !defined( "HANDLERS_DIR" ) )
 	
 if( !defined( "IMAGES_DIR" ) )
 	define ( "IMAGES_DIR", "../images/" );
+
+if( !defined( "GALLERY_UPLOAD_DIR" ) )
+	define ( "GALLERY_UPLOAD_DIR", "../uploads/gallery/" );
 	
 if( !defined( "MODULES_DIR" ) )
 	define ( "MODULES_DIR", "modules/" );
@@ -69,6 +72,9 @@ if( !defined( "DEFAULT_IMG" ) )
 	
 if( !defined( "ADMIN_HOME_PAGE" ) )
 	define ( "ADMIN_HOME_PAGE", "main" );
+
+if( !defined( "SMALL_IMAGE_EXT" ) )
+	define( "SMALL_IMAGE_EXT", "_small" );
 
 	
 ?>

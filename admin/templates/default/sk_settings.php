@@ -7,7 +7,7 @@ class sk_settings
 	{
 		$HTML = <<<HTML
 		<form method="POST">
-			<table class="settingsTable">
+			<table class="dialog no_border form">
 				<tr>
 					<td>
 						Site Name:
@@ -70,22 +70,6 @@ class sk_settings
 					</td>
 					<td>
 						{$fields['debugMode']}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Site Home Page:
-					</td>
-					<td>
-						{$fields['defaultPage']}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Site Default Template:
-					</td>
-					<td>
-						{$fields['defaultTemplate']}
 					</td>
 				</tr>
 				<tr>

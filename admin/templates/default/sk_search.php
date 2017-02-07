@@ -64,11 +64,12 @@ HTML;
 		return $html;
 	}
 	
-	function searchBox( $fields )
+	function searchBox( $fields, $hidden_additions="" )
 	{
 		$html = <<<HTML
 		<form action="index.php" method="GET">
 		<input type="hidden" name="cat" value="{$_GET['cat']}">
+		{$hidden_additions}
 			<div class="searchBox">
 				{$fields}
 				<input type="submit" value="Search">

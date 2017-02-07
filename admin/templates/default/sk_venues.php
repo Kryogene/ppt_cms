@@ -12,7 +12,7 @@ class sk_venues
 	{
 		$HTML = <<<HTML
 		<form method="POST" action="index.php?cat=venues&add">
-			<table class="profileTable">
+			<table class="dialog no_border form">
 				<tr>
 					<td>
 						Venue Name: <sup>*</sup>
@@ -26,7 +26,7 @@ class sk_venues
 						Day(s): <sup>*</sup>
 					</td>
 					<td>
-						<div style="float:left;margin: 3px;">{$fields['day']}</div><div style="float:left;margin: 3px;">{$fields['startTime']}</div>
+						<div style="float:left;margin: 3px;">{$fields['weekday']}</div><div style="float:left;margin: 3px;">{$fields['startTime']}</div>
 					</td>
 				</tr>
 				<tr>
@@ -129,21 +129,6 @@ HTML;
 					Day
 				</th>
 				<th>
-					Address
-				</th>
-				<th>
-					City
-				</th>
-				<th>
-					State
-				</th>
-				<th>
-					Zip Code
-				</th>
-				<th>
-					Phone
-				</th>
-				<th>
 					Description
 				</th>
 				<th>
@@ -162,7 +147,7 @@ HTML;
 		
 	}
 
-	function search_row( $data )
+	function search_row( $data, $options )
 	{
 		
 		$HTML = <<<HTML
@@ -174,32 +159,38 @@ HTML;
 					{$data['startTime']}
 				</td>
 				<td>
-					{$data['day']}
-				</td>
-				<td>
-					{$data['address']}
-				</td>
-				<td>
-					{$data['city']}
-				</td>
-				<td>
-					{$data['state']}
-				</td>
-				<td>
-					{$data['zipCode']}
-				</td>
-				<td>
-					{$data['phone']}
+					{$data['weekday']}
 				</td>
 				<td>
 					{$data['description']}
 				</td>
 				<td>
-					<a href="index.php?cat=venues&modify&id={$data['id']}">Modify</a> | <a href="index.php?cat=venues&deactivate&id={$data['id']}">Deactivate</a>
+					{$options}
+				</td>
 			</tr>
 HTML;
 		return $HTML;
 		
+	}
+	
+	function modify_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=venues&modify&id={$id}">
+			<img src="images/icons/modify.png" alt="Modify" title="Modify">
+		</a>
+HTML;
+		return $HTML;
+	}
+	
+	function delete_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=venues&deactivate&id={$id}">
+			<img src="images/icons/deactivate.png" alt="Deactivate" title="Deactivate">
+		</a>
+HTML;
+		return $HTML;
 	}
 	
 	public function modifyTable( $fields )
@@ -207,7 +198,7 @@ HTML;
 		$HTML = <<<HTML
 		<form method="POST" action="index.php?cat=venues&search">
 		{$fields['id']}
-			<table class="profileTable">
+			<table class="dialog no_border form">
 				<tr>
 					<td>
 						Venue Name:
@@ -221,7 +212,7 @@ HTML;
 						Day(s):
 					</td>
 					<td>
-						<div style="float:left;margin: 3px;">{$fields['day']}</div><div style="float:left;margin: 3px;">{$fields['startTime']}</div>
+						<div style="float:left;margin: 3px;">{$fields['weekday']}</div><div style="float:left;margin: 3px;">{$fields['startTime']}</div>
 					</td>
 				</tr>
 				<tr>
@@ -289,62 +280,6 @@ HTML;
 		</form>
 HTML;
 		return $HTML;
-	}
-	
-	function showPublicVenue( $venue )
-	{
-	$html = <<<HTML
-		<p>
-			<table class='publicVenueTable'>
-				<tr>
-					<th colspan=3>{$venue['name']}</th>
-				</tr>
-				<tr>
-					<td rowspan=4>
-						<img src="{$venue['img']}">
-					</td>
-
-					<td>
-						<span class='textTitle'>Day and Time:</span>
-					</td>
-					<td>
-						<span class='textVal'>{$venue['dayAndTime']}</span>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<span class='textTitle'>Address:</span>
-					</td>
-					<td>
-						<span class='textVal'>{$venue['address']}</span><br />
-						<span class='textVal'>{$venue['city']}, {$venue['state']} {$venue['zipCode']}</span>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<span class='textTitle'>Phone:</span>
-					</td>
-					<td>
-						<span class='textVal'>{$venue['phone']}</span>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<span class='textTitle'>Features:</span>
-					</td>
-					<td>
-						{$venue['features_txt']}
-					</td>
-				</tr>
-				<tr>
-					<td colspan=3>
-						<span class='textVal'>{$venue['lg_desc']}</span>
-					</td>
-				</tr>
-			</table>
-		</p>
-HTML;
-		return $html;
 	}
 	
 }

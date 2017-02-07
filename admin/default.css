@@ -92,7 +92,7 @@ input[type="number"]
 {
 	font-size: 14px;
     height: 15px;
-    width: 75px;
+    width: 50px;
     padding: 5px;
 }
 input[type="radio"], input[type="checkbox"]
@@ -142,6 +142,11 @@ textarea
     box-shadow: 2px 2px 3px #000000;
 
 }
+textarea.small
+{
+	width: 15em;
+	height: 5em;
+}
 select:focus{
     outline:none;
 }
@@ -155,6 +160,7 @@ select
     -khtml-border-radius: 10px; /* KHTML */
     height: 30px;
     min-width: 50px;
+		max-width: 200px;
     background: -webkit-linear-gradient(#8AC1CA, #f9f9f9); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#8AC1CA, #f9f9f9); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(#8AC1CA, #f9f9f9); /* For Firefox 3.6 to 15 */
@@ -503,7 +509,7 @@ main
 main section
 {
 
-	width: 65%;
+	width: 75%;
 	float: left;
 	margin: 20px 20px 20px 20px;
 	
@@ -780,6 +786,67 @@ section article
     background: -moz-linear-gradient(#b4eaac, #f9f9f9); /* For Firefox 3.6 to 15 */
     background: linear-gradient(#b4eaac, #f9f9f9); /* Standard syntax */
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#b4eaac', endColorstr='#f9f9f9'); /* IE */
+}
+
+main section div.sectionWrap
+{
+	position:relative;
+	width: 100%;
+	height: 100%;
+	min-height: 300px;
+}
+
+main section div.sectionWrap::after
+{
+	content: "";
+	display: block;
+	clear: both;
+}
+
+main section div.sectionWrap div.side
+{
+	position: absolute;
+	float:left;
+	width: 20%;
+	height: 100%;
+	border-right: 1px solid #cbcbcb;
+	background-color: #f3f3f3;
+}
+
+main section div.sectionWrap div.menu ul
+{
+	list-style: none;
+	font-size: 10px;
+	padding-left: 5px;
+}
+
+main section div.sectionWrap div.menu li::before
+{
+	content: "└";
+	padding:4px;
+}
+
+main section div.sectionWrap div.menu li
+{
+	padding: 5px;
+	maring: 5px 0 5px 0;
+	border-bottom: 1px solid #fefefe;
+	background-color: #dfdfdf;
+}
+
+main section div.sectionWrap div.menu li a
+{
+	font-size: 13px;
+	font-weight: unset;
+}
+
+main section div.sectionWrap div.main
+{
+	position: relative;
+	padding: 5px;
+	width: 78%;
+	float:right;
+	font-size: 11px;
 }
 
 main section .settingsFormTable
@@ -1226,7 +1293,9 @@ main section .search_table td
 {
 	padding: 5px;
 	border-right: 1px solid #aaaaaa;
+	min-width: 75px;
 }
+
 main section .search_table td:hover
 {
 	background: rgba(200, 200, 200, 0.5);
@@ -1267,7 +1336,7 @@ main section div.confirm
     -webkit-box-shadow: 3px 3px 5px #000000;
     box-shadow: 3px 3px 5px #000000;
 }
-.bodyBox input[type="text"], input[type="password"]
+.bodyBox input[type="text"], .bodyBox input[type="password"]
 {
 	font-size: 14px;
     height: 15px;
@@ -1282,4 +1351,111 @@ span.no_backup
 {
 	color: #ff1e1e;
 	font-weight: bold;
+}
+
+.light
+{
+	background-color: rgba(202, 202, 202, 0.3);
+	
+}
+
+.dialog
+{
+	border: 1px solid #aaaaaa;
+	border-radius: 15px;
+	
+	padding: 3px;
+	margin: 5px auto 5px auto;
+	
+	width: 90%;
+	
+	-moz-box-shadow: -3px -4px 4px -3px #5e5e5e inset;
+    -webkit-box-shadow: -3px -4px 4px -3px #5e5e5e inset;
+    box-shadow: -3px -4px 4px -3px #5e5e5e inset;
+}
+
+.no-border
+{
+	border: 0px;
+}
+
+.border tr td
+{
+	border-bottom: 1px solid #cdcdcd;
+}
+
+.form p
+{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size: 9px;
+}
+
+span .small
+{
+	font-size: 10px;
+}
+
+table.form
+{
+	border-collapse: collapse;
+}
+
+table.form td
+{
+	padding: 5px;
+}
+
+table.form tr
+{
+	border-bottom: 1px solid #bbbbbb;
+}
+
+table.form tr:last-child
+{
+	border-bottom: 0px;
+}
+
+.no_border
+{
+	border: 0px;
+}
+
+figure
+{
+    float: left;
+    text-align: center;
+    margin: 5px;
+    padding: 10px;
+    background: -webkit-linear-gradient(#8AC1CA, #f9f9f9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#8AC1CA, #f9f9f9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#8AC1CA, #f9f9f9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#8AC1CA, #f9f9f9); /* Standard syntax */
+    -moz-border-radius:10px; /* Firefox */
+    -webkit-border-radius: 10px; /* Safari, Chrome */
+    -khtml-border-radius: 10px; /* KHTML */
+    border-radius: 10px; /* CSS3 */
+    color: #000000;
+    border: 1px solid #aedfff;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.gallerySearch figure
+{
+    float: center;
+}
+
+.thumb {
+    max-height: 75px;
+    border: 1px solid #000;
+    margin: 10px 5px 10px 5px;
+}
+
+figure.fig textarea
+{
+	width: 100%;
+	height: 3em;
 }

@@ -21,7 +21,7 @@ class Statistics
     $db = Database::getInstance();
 		$SQL = $db->getConnection();
     
-    $qstr = "SELECT player_statistics.*, players.id, players.lastName, players.firstName FROM player_statistics INNER JOIN players ON player_statistics.player_id = players.id WHERE player_statistics.id = {$this->_id}";
+    $qstr = "SELECT players.id, player_statistics.*, players.lastName, players.firstName FROM player_statistics INNER JOIN players ON player_statistics.player_id = players.id WHERE player_statistics.id = {$this->_id}";
     $query = $SQL->query($qstr);
     if($query)
     {
@@ -35,11 +35,9 @@ class Statistics
     
   }
   
-  public function getModifyHTML()
+  public function getModifyTable($row = "")
   {
     $Template = Template::getInstance();
-    
-    $row = $Template->Skin['statistics']->statisticModifyField($this->_data);
     
     $options = array();
     $options['years'] = $Template->Skin['globals']->selectField("year", $Template->getYearOptions($this->_data['year']));
@@ -52,6 +50,20 @@ class Statistics
     $table .= $Template->Skin['statistics']->statisticBodyBox($Template->Skin['statistics']->statisticTable($row));
     return $Template->Skin['statistics']->modifyForm($table);
   }
+	
+	public function getStatisticRow()
+	{
+		$Template = Template::getInstance();
+		
+		return $Template->Skin['statistics']->statisticModifyField($this->_data);
+	}
+	
+	public function getBlankRow()
+	{
+		$Template = Template::getInstance();
+		$players = $Template->Skin['globals']->selectFieldBlank("player[]", $Template->getUserOptions());
+		return $Template->Skin['statistics']->statisticField($players);
+	}
   
   public static function addForm( $Template )
   {

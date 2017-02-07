@@ -157,7 +157,7 @@ HTML;
 	public function jQuery()
 	{
 		$HTML = <<<HTML
-		<script type='text/javascript' src='../jquery-3.1.1.min.js'></script>
+		<script type='text/javascript' src='../scripts/jquery-3.1.1.min.js'></script>
 HTML;
 		return $HTML;
 	}
@@ -301,41 +301,49 @@ HTML;
 	}
 	
 		
-	public function inputField($name, $type, $value = "")
+	public function inputField($name, $type, $value = "", $style = "")
 	{
 		$HTML = <<<HTML
-		<input type="{$type}" name="{$name}" value="{$value}">
+		<input type="{$type}" name="{$name}" value="{$value}" class="{$style}">
 HTML;
 		return $HTML;
 	}
 	
-	public function textArea($name, $value = "")
+	public function textArea($name, $value = "", $style = "")
 	{
 		$HTML = <<<HTML
-		<textarea name="{$name}">{$value}</textarea>
+		<textarea name="{$name}" class="{$style}">{$value}</textarea>
 HTML;
 		return $HTML;
 	}
 	
-	public function checkBox($name, $value, $title, $checked="")
+	public function imageUpload($name, $multiple = "", $accept="image/*")
 	{
 		$HTML = <<<HTML
-		<input type="checkbox" name="{$name}" value="{$value}" {$checked}> {$title}<br>
+		<input name="{$name}" {$multiple} accept="{$accept}" type="file" id="photos">
 HTML;
 		return $HTML;
 	}
 	
-	public function selectField($name, $options)
+	public function checkBox($name, $value, $title, $checked="", $style = "")
 	{
 		$HTML = <<<HTML
-		<select name="{$name}">
+		<input type="checkbox" name="{$name}" value="{$value}" {$checked} class="{$style}"> {$title}<br>
+HTML;
+		return $HTML;
+	}
+	
+	public function selectField($name, $options, $style = "")
+	{
+		$HTML = <<<HTML
+		<select name="{$name}" class="{$style}">
 			{$options}
 		</select>
 HTML;
 		return $HTML;
 	}
 	
-	public function selectFieldBlank($name, $options)
+	public function selectFieldBlank($name, $options, $style = "")
 	{
 		$HTML = <<<HTML
 		<select name="{$name}">

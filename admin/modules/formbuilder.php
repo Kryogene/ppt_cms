@@ -3,7 +3,7 @@
 class FormBuilder
 {
 	
-	private $_Template;
+	private $_Template, $_SQL;
 	private $States = array(
     "AL" => "Alabama",
     "AK" => "Alaska",
@@ -202,9 +202,10 @@ class FormBuilder
 'Pacific/Tongatapu' => '(GMT+13:00) Nuku\'alofa'
 );
 	
-	public function __construct( Template $template )
+	public function __construct( Template $template, $sql )
 	{
 		$this->_Template = $template;
+		$this->_SQL = $sql;
 	}
 	
 	public function buildByType($data, $type)
@@ -214,38 +215,42 @@ class FormBuilder
 		$arr = array();
 		for($i = 0; $i < count($data); $i++)
 		{
-			$arr[$data_keys[$i]] = $this->_buildHTML($data[$data_keys[$i]], $data_keys[$i], $type[$i]);
+			// Detect if a style class is attached
+			if(is_array($type[$i]))
+				$arr[$data_keys[$i]] = $this->_buildHTML($data[$data_keys[$i]], $data_keys[$i], $type[$i][0], $type[$i][1]);
+			else
+				$arr[$data_keys[$i]] = $this->_buildHTML($data[$data_keys[$i]], $data_keys[$i], $type[$i]);
 		}
 		return $arr;
 	}
 	
-	private function _buildHTML($data, $data_key, $type)
+	private function _buildHTML($data, $data_key, $type, $class="")
 	{
 		switch($type)
 		{
-				case "text":
-					$html = $this->_Template->Skin['globals']->inputField($data_key, $type, $data);
+				default:
+					$html = $this->_Template->Skin['globals']->inputField($data_key, $type, $data, $class);
 				break;
 				case "textarea":
-					$html = $this->_Template->Skin['globals']->textArea($data_key, $data);
+					$html = $this->_Template->Skin['globals']->textArea($data_key, $data, $class);
 				break;
 				case "dropdown":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions($data));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions($data), $class);
 				break;
 				case "timezone":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( $this->_Timezones, (empty($data) ? "US/Eastern" : $data) ));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( $this->_Timezones, (empty($data) ? "US/Eastern" : $data) ), $class);
 				break;
 				case "num_day":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildNumDayOptions($data));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildNumDayOptions($data), $class);
 				break;
 				case "month":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildMonthOptions($data));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildMonthOptions($data), $class);
 				break;
 				case "year":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildYearOptions($data));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildYearOptions($data), $class);
 				break;
 				case "day":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildDayOptions($data));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildDayOptions($data), $class);
 				break;
 				case "time":
 					$html = $this->_buildTimeSelections($data);
@@ -259,28 +264,52 @@ class FormBuilder
 					$html = $this->_buildMultiTimeSelections($times);
 				break;
 				case "checkbox":
-					$html = $this->_Template->Skin['globals']->checkBox($data_key, 1, null, (($data) ? "checked" : ""));
+					$html = $this->_Template->Skin['globals']->checkBox($data_key, 1, null, (($data) ? "checked" : ""), $class);
+				break;
+				case "image_single":
+					$html = $this->_Template->Skin['globals']->imageUpload($data_key);
+				break;
+				case "image_multiple":
+					$html = $this->_Template->Skin['globals']->imageUpload($data_key."[]", "multiple");
+				break;
+				case "gallery_album":
+					$html = $this->_Template->Skin['globals']->selectField($data_key, Album::getAlbumOptions($data, $this->_SQL), $class);
 				break;
 				case "venues":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, Venue::getVenueOptions($data));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, Venue::getVenueOptions($data), $class);
 				break;
 				case "venue_features":
 					$html = $this->_buildVenueFeatures($data);
 				break;
 				case "state":
-				 $html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( $this->States, (empty($data) ? "FL" : $data) ));
+				 $html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( $this->States, (empty($data) ? "FL" : $data) ), $class);
+				break;
+				case "user_group":
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( $this->_getUserGroups(), (empty($data) ? "3" : $data) ), $class);
 				break;
 				case "page":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( Page::getAllPublicPages(), (empty($data) ? "1" : $data) ));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( Page::getAllPublicPages(), (empty($data) ? "1" : $data) ), $class);
 				break;
 				case "template":
-					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( Template::getAllTemplates(), (empty($data) ? "1" : $data) ));
+					$html = $this->_Template->Skin['globals']->selectField($data_key, $this->_buildOptions( Template::getAllTemplates(), (empty($data) ? "1" : $data) ), $class);
 				break;
 				case "hidden":
 					$html = $this->_Template->Skin['globals']->inputField($data_key, $type, $data);
 				break;
 		}
 		return $html;
+	}
+	
+	private function _getUserGroups()
+	{
+		$q_str = "SELECT * FROM `player_groups` ORDER BY `group_id` ASC";
+		$query = $this->_SQL->query($q_str);
+		$arr = array();
+		while($result = $query->fetch_assoc())
+		{
+			$arr[$result['group_id']] = $result['name'];
+		}
+		return $arr;
 	}
 	
 	private function _buildVenueFeatures( $data )

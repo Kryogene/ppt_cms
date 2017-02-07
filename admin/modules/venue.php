@@ -34,7 +34,7 @@ class Venue
     $db = Database::getInstance();
 		$SQL = $db->getConnection();
     
-    $qstr = "SELECT id, name, startTime, day, address, city, state, zipCode, phone, features, description FROM `venues` WHERE `id` = '{$this->_id}'";
+    $qstr = "SELECT id, name, startTime, weekday, address, city, state, zipCode, phone, features, description FROM `venues` WHERE `id` = '{$this->_id}'";
     $query = $SQL->query($qstr);
     
     if($query->num_rows > 0)
@@ -51,7 +51,7 @@ class Venue
 		$Template = Template::getInstance();
     $this->_Data['name'] = htmlspecialchars_decode($this->_Data['name']);
     $this->_Data['startTime'] = htmlspecialchars_decode($this->_Data['startTime']);
-    $this->_Data['day'] = htmlspecialchars_decode($this->_Data['day']);
+    $this->_Data['weekday'] = htmlspecialchars_decode($this->_Data['weekday']);
     $this->_Data['address'] = htmlspecialchars_decode($this->_Data['address']);
     $this->_Data['city'] = htmlspecialchars_decode($this->_Data['city']);
     $this->_Data['state'] = htmlspecialchars_decode($this->_Data['state']);
@@ -68,7 +68,7 @@ class Venue
 		$Template = Template::getInstance();
 		$data = array('name' => '',
 								 'startTime' => '',
-								 'day' => '',
+								 'weekday' => '',
 								 'address' => '',
 								 'city' => '',
 								 'state' => '',
@@ -151,7 +151,7 @@ class Venue
     $description = addslashes(htmlspecialchars($description));
     
     $q_str = "UPDATE `venues` SET `name` = '{$name}', 
-																	`day` = '{$day}', 
+																	`weekday` = '{$day}', 
 																	`startTime` = '{$startTime}',
 																	`address` = '{$address}',
 																	`city` = '{$city}',
@@ -227,11 +227,11 @@ class Venue
 		
 		while($result = $query->fetch_assoc())
 		{
-			if(is_numeric($result['day']) || empty($result['day']))
+			if(is_numeric($result['weekday']) || empty($result['weekday']))
 				$html .= Template::getInstance()->Skin['search']->selectOption( $result['name'], $result['id'] );
 			else
 			{
-				$days = explode("|", $result['day']);
+				$days = explode("|", $result['weekday']);
 				foreach($days as $val)
 				{
 					$html .= Template::getInstance()->Skin['search']->selectOption( $result['name'] . "(" . CMS_Core::getInstance()->Day[$val] . ")", $result['id'] . "|" . $val);
@@ -252,11 +252,11 @@ class Venue
 		
 		while($result = $query->fetch_assoc())
 		{
-			if(is_numeric($result['day']) || empty($result['day']))
+			if(is_numeric($result['weekday']) || empty($result['weekday']))
 				$arr[$result['id']] = $result['name'];
 			else
 			{
-				$days = explode("|", $result['day']);
+				$days = explode("|", $result['weekday']);
 				foreach($days as $val)
 				{
 					$arr[$result['id'] . "|" . $val] = $result['name'] . "(" . CMS_Core::getInstance()->Day[$val] . ")";

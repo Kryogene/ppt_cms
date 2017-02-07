@@ -95,14 +95,35 @@ class Statistics_Handler extends Page_Handler
 	
 	private function _handleModify()
 	{
-		if(!isset($_GET['id']) || !is_numeric($_GET['id'])) 
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		if(isset($_GET['id']) && is_numeric($_GET['id'])) 
 		{
-			$this->SectionHandler();
+			$stats = new Statistics($_GET['id']);
+			$this->_Page->setSection( $this->_Page->Name, $stats->getModifyTable($stats->getStatisticRow()) );
 			return;
 		}
-		$stats = new Statistics($_GET['id']);
-		
-		$this->_Page->setSection( $this->_Page->Name, $stats->getModifyHTML() );
+		if(isset($_GET['venue_id']))
+		{
+			$year = (isset($_GET['year']) ? $_GET['year'] : date('Y'));
+			$month = (isset($_GET['month']) ? $_GET['month'] : date('n'));
+			$day = (isset($_GET['day']) ? $_GET['day'] : date('d'));
+			
+			$q_str = "SELECT `players`.`id`, `player_statistics`.`id` FROM `player_statistics` INNER JOIN `players` ON `player_statistics`.`player_id` = `players`.`id` WHERE `player_statistics`.`year` = '" . $SQL->real_escape_string($year) . "'
+																											AND `player_statistics`.`month` = '" . $SQL->real_escape_string($month) . "'
+																											AND `player_statistics`.`day` = '" . $SQL->real_escape_string($day) . "'
+																											AND `player_statistics`.`venue_id` = '" . $SQL->real_escape_string($_GET['venue_id']) . "'
+																											ORDER BY `players`.`lastName` ASC";
+			$query = $SQL->query($q_str);
+			$rows = "";
+			while($result = $query->fetch_assoc())
+			{
+				$stats = new Statistics($result['id']);
+				$rows .= $stats->getStatisticRow();
+			}
+			$rows .= $stats->getBlankRow();
+			$this->_Page->setSection( $this->_Page->Name, $stats->getModifyTable($rows) );
+		}
 		
 	}
 	
@@ -162,22 +183,51 @@ class Statistics_Handler extends Page_Handler
 		$db = Database::getInstance();
 		$SQL = $db->getConnection();
 		
-		$q_str = "UPDATE `player_statistics` SET year = '{$_POST['year']}',
-																							month = '{$_POST['month']}', 
-																							day = '{$_POST['day']}', 
-																							venue_id = {$_POST['venue_id']}, 
-																							nonvenue = {$_POST['nonvenue']}, 
-																							venue_wins = {$_POST['venue_wins']},
-																							bounty = {$_POST['bounty']},
-																							high_hand = {$_POST['high_hand']},
-																							xtra_points = {$_POST['xtra_points']},
-																							hands_played = {$_POST['hands_played']},
-																							event_points = {$_POST['event_points']} 
-																							WHERE `id` = {$_POST['sid']}
+		for($i=0;$i<count($_POST['id']);$i++)
+		{		
+
+			$q_str = "UPDATE `player_statistics` SET year = '" . $SQL->real_escape_string($_POST['year']) . "',
+																							month = '" . $SQL->real_escape_string($_POST['month']) . "', 
+																							day = '" . $SQL->real_escape_string($_POST['day']) . "', 
+																							venue_id = '" . $SQL->real_escape_string($_POST['venue_id']) . "', 
+																							nonvenue = '" . $SQL->real_escape_string($_POST['nonvenue'][$i]) . "',
+																							venue_wins = '" . $SQL->real_escape_string($_POST['venue_wins'][$i]) . "',
+																							bounty = '" . $SQL->real_escape_string($_POST['bounty'][$i]) . "',
+																							high_hand = '" . $SQL->real_escape_string($_POST['high_hand'][$i]) . "',
+																							xtra_points = '" . $SQL->real_escape_string($_POST['xtra_points'][$i]) . "',
+																							hands_played = '" . $SQL->real_escape_string($_POST['hands_played'][$i]) . "',
+																							event_points = '" . $SQL->real_escape_string($_POST['event_points'][$i]) . "'
+																							WHERE `id` = '" . $SQL->real_escape_string($_POST['id'][$i]) . "'
 																							";
-		$SQL->query($q_str) or die($SQL->error);
+			$SQL->query($q_str) or die($SQL->error);
+		}
+		$new_stat_index = count($_POST['id']);
+		$new_added = 0;
+		for($i=0;$i<count($_POST['player']);$i++)
+		{
+			if(!empty(trim($_POST['player'][$i])))
+			{
+				$q_str = "INSERT INTO `player_statistics` VALUES(null,
+																							'" . $SQL->real_escape_string($_POST['year']) . "',
+																							'" . $SQL->real_escape_string($_POST['month']) . "', 
+																							'" . $SQL->real_escape_string($_POST['day']) . "', 
+																							'" . $SQL->real_escape_string($_POST['player'][$i]) . "',
+																							'" . $SQL->real_escape_string($_POST['venue_id']) . "', 
+																							'" . $SQL->real_escape_string($_POST['nonvenue'][$new_stat_index]) . "',
+																							'" . $SQL->real_escape_string($_POST['venue_wins'][$new_stat_index]) . "',
+																							'" . $SQL->real_escape_string($_POST['bounty'][$new_stat_index]) . "',
+																							'" . $SQL->real_escape_string($_POST['high_hand'][$new_stat_index]) . "',
+																							'" . $SQL->real_escape_string($_POST['xtra_points'][$new_stat_index]) . "',
+																							'" . $SQL->real_escape_string($_POST['hands_played'][$new_stat_index]) . "',
+																							'" . $SQL->real_escape_string($_POST['event_points'][$new_stat_index]) . "'
+																							)";
+				$SQL->query($q_str) or die($SQL->error);
+				$new_added++;
+				$new_stat_index++;
+			}
+		}
 		
-		$this->_Page->setAlert("Success", "All player statistics have been successfully updated!");
+		$this->_Page->setAlert("Success", "<b>" . count($_POST['id']) . "</b> statistics have been updated and <b>" . $new_added . "</b> have been added!");
 	}
 	
 	private function _handleConfirmedDelete()

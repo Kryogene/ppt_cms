@@ -16,13 +16,7 @@ class sk_statistics
 					Venue
 				</th>
 				<th>
-					Day
-				</th>
-				<th>
-					Month
-				</th>
-				<th>
-					Year
+					Date
 				</th>
 				<th>
 					Options
@@ -40,7 +34,38 @@ HTML;
 		
 	}
 	
-	function search_row( $data )
+	function search_table_grouped( $rows, $nav="" )
+	{
+		
+		$HTML = <<<HTML
+		<table class="search_table">
+			<tr>
+				<th>
+					Players
+				</th>
+				<th>
+					Venue
+				</th>
+				<th>
+					Date
+				</th>
+				<th>
+					Options
+				</th>
+			</tr>
+			{$rows}
+			<tr>
+			<td colspan=6>
+			{$nav}
+			</td>
+			</tr>
+		</table>
+HTML;
+		return $HTML;
+		
+	}
+	
+	function search_row( $data, $options )
 	{
 
 		$HTML = <<<HTML
@@ -49,23 +74,77 @@ HTML;
 					{$data['player_id']}
 				</td>
 				<td>
-					{$data['venue_id']}
+					{$data['name']}
 				</td>
 				<td>
-					{$data['day']}
+					{$data['month']} {$data['day']}, {$data['year']}
 				</td>
 				<td>
-					{$data['month']}
-				</td>
-				<td>
-					{$data['year']}
-				</td>
-				<td>
-					<a href="index.php?cat=statistics&modify&id={$data['id']}">Modify</a> | <a href="index.php?cat=statistics&delete&id={$data['id']}">Delete</a>
+					{$options}
 			</tr>
 HTML;
 		return $HTML;
 		
+	}
+	
+	function search_row_grouped( $data, $options )
+	{
+
+		$HTML = <<<HTML
+			<tr>
+				<td>
+					{$data['players']}
+				</td>
+				<td>
+					{$data['name']}
+				</td>
+				<td>
+					{$data['month']} {$data['day']}, {$data['year']}
+				</td>
+				<td>
+					{$options}
+			</tr>
+HTML;
+		return $HTML;
+		
+	}
+	
+	function modify_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=statistics&modify&id={$id}">
+			<img src="images/icons/modify.png" alt="Modify" title="Modify">
+		</a>
+HTML;
+		return $HTML;
+	}
+	
+	function delete_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=statistics&delete&id={$id}">
+			<img src="images/icons/delete.png" alt="Delete" title="Delete">
+		</a>
+HTML;
+		return $HTML;
+	}
+	
+	function modify_grouped_link($query)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=statistics&modify&{$query}">
+			<img src="images/icons/modify.png" alt="Modify" title="Modify">
+		</a>
+HTML;
+		return $HTML;
+	}
+	
+	function delete_grouped_link($query)
+	{
+		$HTML = <<<HTML
+		<!--No Deletion for groups-->
+HTML;
+		return $HTML;
 	}
 	
 	function addForm( $content )
@@ -137,6 +216,8 @@ HTML;
       </tr>
       {$fields}
     </table>
+		<input type="button" id="newRowButton" value="New Row">
+		<script type="text/javascript" src="scripts/leaderboardController.js"></script>
 HTML;
     return $HTML;
   }
@@ -147,28 +228,28 @@ HTML;
       <tr>
         <td>
           {$data['lastName']}, {$data['firstName']}
-					<input type="hidden" name="sid" value="{$data['id']}">
+					<input type="hidden" name="id[]" value="{$data['id']}">
         </td>
         <td>
-          <input type="number" name="nonvenue" value="{$data['nonvenue']}">
+          <input class="iNumber" type="number" name="nonvenue[]" value="{$data['nonvenue']}">
         </td>
 				<td>
-					<input type="number" name="venue_wins" value="{$data['venue_wins']}">
+					<input class="iNumber" type="number" name="venue_wins[]" value="{$data['venue_wins']}">
 				</td>
         <td>
-          <input type="number" name="bounty" value="{$data['bounty']}">
+          <input class="iNumber" type="number" name="bounty[]" value="{$data['bounty']}">
         </td>
         <td>
-          <input type="number" name="high_hand" value="{$data['high_hand']}">
+          <input class="iNumber" type="number" name="high_hand[]" value="{$data['high_hand']}">
         </td>
         <td>
-          <input type="number" name="xtra_points" value="{$data['xtra_points']}">
+          <input class="iNumber" type="number" name="xtra_points[]" value="{$data['xtra_points']}">
         </td>
         <td>
-          <input type="number" name="hands_played" value="{$data['hands_played']}">
+          <input class="iNumber" type="number" name="hands_played[]" value="{$data['hands_played']}">
         </td>
         <td>
-          <input type="number" name="event_points" value="{$data['event_points']}">
+          <input class="iNumber" type="number" name="event_points[]" value="{$data['event_points']}">
         </td>
       </tr>
 HTML;

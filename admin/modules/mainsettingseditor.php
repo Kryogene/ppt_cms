@@ -13,8 +13,6 @@ class MainSettingsEditor
 													"text",
 													"checkbox",
 													"checkbox",
-													"page",
-													"template",
 													"text",
 													"text",
 													"text",
@@ -52,6 +50,8 @@ class MainSettingsEditor
 	public function getFormData()
 	{
 		$Template = Template::getInstance();
+		//To ensure proper saving of timestamp
+		$this->_Data['defaultTimestamp'] = addslashes($this->_Data['defaultTimestamp']);
 		
 		return $Template->convertToForm($this->_Data, $this->_Types);
 	}
@@ -64,8 +64,6 @@ class MainSettingsEditor
 												 $uploadDir, 
 												 $online, 
 												 $debugMode, 
-												 $defaultPage, 
-												 $defaultTemplate, 
 												 $facebook,
 												 $twitter,
 												 $googlePlus,
@@ -81,9 +79,6 @@ class MainSettingsEditor
 		
 		$db = Database::getInstance();
 		$SQL = $db->getConnection();
-
-		if(empty(trim($defaultPage))) $defaultPage = 1;
-		if(empty(trim($defaultTemplate))) $defaultTemplate = 1;
 		
 		$q_str = "UPDATE `settings` SET `siteTitle` = '{$siteTitle}', 
 																		`defaultTimeZone` = '{$defaultTimeZone}', 
@@ -93,8 +88,6 @@ class MainSettingsEditor
 																		`uploadDir` = '{$uploadDir}', 
 																		`online` = '{$online}',
 																		`debugMode` = '{$debugMode}', 
-																		`defaultPage` = '{$defaultPage}', 
-																		`defaultTemplate` = '{$defaultTemplate}', 
 																		`facebook` = '{$facebook}', 
 																		`twitter` = '{$twitter}', 
 																		`googlePlus` = '{$googlePlus}', 

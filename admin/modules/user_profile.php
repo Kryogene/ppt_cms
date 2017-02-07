@@ -11,7 +11,7 @@ class User_Profile
 								"text",
 								"text",
 								"text",
-								"text"
+								"user_group"
 							);
   
   function __construct( $id )

@@ -44,8 +44,6 @@ class Settings_Handler extends Page_Handler
 												 $_POST['uploadDir'],
 												 (isset($_POST['online']) ? 1 : 0),
 												 (isset($_POST['debugMode']) ? 1 : 0),
-												 $_POST['defaultPage'],
-												 $_POST['defaultTemplate'],
 												 $_POST['facebook'],
 												 $_POST['twitter'],
 												 $_POST['googlePlus'],

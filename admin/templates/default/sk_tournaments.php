@@ -12,7 +12,7 @@ class sk_tournaments
 	{
 		$HTML = <<<HTML
 		<form method="POST" action="index.php?cat=tournaments&add">
-			<table class="profileTable">
+			<table class="dialog no_border form">
 				<tr>
 					<td>
 						Venue: <sup>*</sup>
@@ -53,7 +53,7 @@ HTML;
 		$HTML = <<<HTML
 		<form method="POST" action="index.php?cat=tournaments&search">
 		{$fields['id']}
-			<table class="profileTable">
+			<table class="dialog no_border form">
 				<tr>
 					<td>
 						Venue: <sup>*</sup>
@@ -162,7 +162,7 @@ HTML;
 		
 	}
 	
-	function search_row( $data )
+	function search_row( $data, $options )
 	{
 
 		$HTML = <<<HTML
@@ -180,11 +180,32 @@ HTML;
 					{$data['information']}
 				</td>
 				<td>
-					<a href="index.php?cat=tournaments&modify&id={$data['id']}">Modify</a> | <a href="index.php?cat=tournaments&delete&id={$data['id']}">Delete</a>
+					{$options}
+				</td>
 			</tr>
 HTML;
 		return $HTML;
 		
+	}
+	
+	function modify_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=tournaments&modify&id={$id}">
+			<img src="images/icons/modify.png" alt="Modify" title="Modify">
+		</a>
+HTML;
+		return $HTML;
+	}
+	
+	function delete_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=tournaments&delete&id={$id}">
+			<img src="images/icons/delete.png" alt="Delete" title="Delete">
+		</a>
+HTML;
+		return $HTML;
 	}
 	
 }

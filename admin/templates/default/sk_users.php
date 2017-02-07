@@ -419,7 +419,7 @@ HTML;
 		
 	}
 	
-	function search_row( $data )
+	function search_row( $data, $options )
 	{
 		
 		$HTML = <<<HTML
@@ -440,19 +440,96 @@ HTML;
 					{$data['type']}
 				</td>
 				<td>
-					<a href="index.php?cat=users&modify&id={$data['id']}">Modify</a> | <a href="index.php?cat=users&delete&id={$data['id']}">Delete</a>
+					{$options}
+				</td>
 			</tr>
 HTML;
 		return $HTML;
 		
 	}
 	
-		public function profileTable( $fields )
+	function modify_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=users&modify&id={$id}">
+			<img src="images/icons/modify.png" alt="Modify" title="Modify">
+		</a>
+HTML;
+		return $HTML;
+	}
+	
+	function delete_link($id)
+	{
+		$HTML = <<<HTML
+		<a href="index.php?cat=users&delete&id={$id}">
+			<img src="images/icons/delete.png" alt="Delete" title="Delete">
+		</a>
+HTML;
+		return $HTML;
+	}
+	
+	public function createTable( $fields )
+	{
+		$HTML = <<<HTML
+		<form method="POST">
+			<table class="dialog no-border form">
+				<tr>
+					<td>
+						First Name:
+					</td>
+					<td>
+						{$fields['firstName']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Last Name:
+					</td>
+					<td>
+						{$fields['lastName']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Email:
+					</td>
+					<td>
+						{$fields['email']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Phone:
+					</td>
+					<td>
+						{$fields['phone']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Group:
+					</td>
+					<td>
+						{$fields['type']}
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" name="createProfile" value="Create">
+					</td>
+				</tr>
+			</table>
+		</form>
+HTML;
+		return $HTML;
+	}
+	
+	public function profileTable( $fields )
 	{
 		$HTML = <<<HTML
 		<form method="POST">
 		{$fields['id']}
-			<table class="profileTable">
+			<table class="dialog no-border form">
 				<tr>
 					<td>
 						First Name:
