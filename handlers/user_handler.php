@@ -34,6 +34,9 @@ class User_Handler extends Page_Handler
 	
 		$this->DEBUG[] = "Firing Get Handlers...";
 		
+		$p_id = isset($_GET['pid']) ? (is_numeric($_GET['pid']) ? $_GET['pid'] : 0) : 0;
+		$this->_getUserStatistics($p_id);
+		
 		if( isset( $_GET['settings'] ) )
 			$this->_getUserSettings();
 		if( isset( $_GET['update'] ) )
@@ -41,14 +44,19 @@ class User_Handler extends Page_Handler
 		if( isset( $_GET['mail'] ) )
 		{
 			if( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) )
-				$this->_getUserMail( $_GET['id'] );
+			{
+				if( isset($_GET['reply']) )
+					$this->_getComposeForm( $_GET['id'], (isset($_GET['all']) ? 1 : 0) );
+				elseif( isset($_GET['forward']) )
+					$this->_getComposeForm( $_GET['id'], 0, 1 );
+				else
+					$this->_getUserMail( $_GET['id'] );
+			}
 			elseif( isset( $_GET['compose'] ) )
 				$this->_getComposeForm();
 			else
 				$this->_getUserMailBox();
 		}
-		if( isset( $_GET['statistics'] ) )
-			$this->_getUserStatistics();
 		
 		$this->DEBUG[] = "Get Handlers Fired!";
 		
@@ -63,10 +71,11 @@ class User_Handler extends Page_Handler
 		$SQL = $db->getConnection();
 		$Page = Page::getInstance();
 		$Template = Template::getInstance();
+		$Core = CMS_Core::getInstance();
 		
 		$q_str = "SELECT *
 					FROM `players`
-					WHERE `id` = '" . $_COOKIE['pid'] . "'
+					WHERE `id` = '" . $Core->User->id . "'
 				";
 		
 		if($query = $SQL->query($q_str))
@@ -105,8 +114,10 @@ class User_Handler extends Page_Handler
 			$this->DEBUG[] = "User \"" . $Core->User->id . "\" Found!";	
 			
 			$results = $query->fetch_assoc();
+			
+			$form = $Template->convertToForm(array("template_id" => $results['template_id']), array("template"));
 		
-			$content = $Template->Skin['users']->settingsForm( $results );
+			$content = $Template->Skin['users']->settingsForm( $form );
 		}
 		else
 			$content = "Error!";
@@ -124,13 +135,14 @@ class User_Handler extends Page_Handler
 		$SQL = $db->getConnection();
 		$Page = Page::getInstance();
 		$Template = Template::getInstance();
+		$Core = CMS_Core::getInstance();
 		
 		$content = "";
 		
 		$q_str = "SELECT *
 					FROM `player_mail`
-					WHERE `receiver_id` = '" . $_COOKIE['pid'] . "'
-					AND `id` = '" . $message_id . "'
+					WHERE `receiver_id` = '" . $Core->User->id . "'
+					AND `id` = '" . $SQL->real_escape_string( $message_id ) . "'
 				";
 				
 		$query = $SQL->query($q_str);
@@ -150,6 +162,13 @@ class User_Handler extends Page_Handler
 								");				
 				if($query) $this->DEBUG[] = "Mail Set To Unread.";
 			}
+			$results['sender_name'] = $Core->getUserNameByID($results['sender_id']);
+			$recipients = explode(",", $results['all_recipients']);
+			foreach($recipients as $k => $uid)
+			{
+				$recipients[$k] = $Template->Skin['users']->recipientBox($Core->getUserNameByID($uid));
+			}
+			$results['recipients'] = implode(" ", $recipients);
 			
 			$content = $Template->Skin['users']->showMessage( $results );
 			
@@ -165,7 +184,7 @@ class User_Handler extends Page_Handler
 		
 	}
 	
-	private function _getComposeForm( $to = 0 )
+	private function _getComposeForm( $mid = 0, $all = 0, $forward = 0 )
 	{
 		
 		$this->DEBUG[] = "Retrieving Compose Form...";
@@ -173,7 +192,41 @@ class User_Handler extends Page_Handler
 		$Page = Page::getInstance();
 		$Template = Template::getInstance();
 		
-		$Page->setSection( $Page->Title, $Template->Skin['users']->composeMailForm() );
+		if($mid == 0)
+		{
+			$Page->setSection( $Page->Title, $Template->Skin['users']->composeMailForm() );
+			return;
+		}
+		
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		$Core = CMS_Core::getInstance();
+		
+		$q_str = "SELECT * FROM `player_mail` WHERE `id` = '" . $SQL->real_escape_string( $mid ) . "'";
+		
+		$query = $SQL->query($q_str);
+		
+		$result = $query->fetch_assoc();
+		
+		$result['sender'] = $Core->getUserNameByID($result['sender_id']);
+		$result['recipients'] = explode(",", $result['all_recipients']);
+		if($forward == 0)
+			$result['receivers'] = $Template->Skin['users']->receiverBox($result['sender_id'], $Core->getMailNameByID($result['sender_id']));
+		foreach($result['recipients'] as $key => $uid)
+		{
+			$result['recipients'][$key] = $Core->getUserNameByID($uid);
+			if($all == 1 && $uid != $result['sender_id'] && $forward == 0)
+				$result['receivers'] .= $Template->Skin['users']->receiverBox($uid, $Core->getMailNameByID($uid));
+		}
+		$result['recipients'] = implode(" & ", $result['recipients']);
+		
+		
+		$result['message'] = $Template->Skin['users']->replyMessageWrapper($result);
+		
+		if($forward == 0)
+			$Page->setSection( $Page->Title, $Template->Skin['users']->replyMailForm($result) );
+		else
+			$Page->setSection( $Page->Title, $Template->Skin['users']->composeMailForm($result) );
 		
 	}
 	
@@ -197,6 +250,7 @@ class User_Handler extends Page_Handler
 		$q_str = "SELECT *
 					FROM `player_mail`
 					WHERE `receiver_id` = '" . $Core->User->id . "'
+					ORDER BY `time` DESC
 				";
 		if($query = $SQL->query($q_str))
 		{
@@ -206,6 +260,7 @@ class User_Handler extends Page_Handler
 			while($results = $query->fetch_assoc())
 			{
 				$results['sender'] = $Core->getUserNameByID( $results['sender_id'] );
+				$results['date'] = date("F d, Y \a\\t g:ia T", $results['time']);
 				
 				if($results['unread'] == 1)
 				{
@@ -221,7 +276,7 @@ class User_Handler extends Page_Handler
 		}
 		else
 			$this->DEBUG[] = "Mail For User \"" . $_COOKIE['pid'] . "\" NOT Found!";
-		
+
 		
 		$content = $Template->Skin['users']->mailBoxMain( $unread, $total, $messages, $toolbar );
 		
@@ -229,7 +284,7 @@ class User_Handler extends Page_Handler
 		
 	}
 	
-	private function _getUserStatistics()
+	private function _getUserStatistics($p_id)
 	{
 				
 		$this->DEBUG[] = "Retrieving User Statistics...";
@@ -238,6 +293,9 @@ class User_Handler extends Page_Handler
 		$SQL = $db->getConnection();
 		$Page = Page::getInstance();
 		$Template = Template::getInstance();
+		$Core = CMS_Core::getInstance();
+		
+		if($p_id == 0) $p_id = $Core->User->id;
 		
 		$year = (isset($_GET['year']) && is_numeric($_GET['year'])) ? $_GET['year'] : date('Y');
 		/*
@@ -258,9 +316,10 @@ class User_Handler extends Page_Handler
 		$content = $Template->Skin['users']->userStatistics( $results );
 		*/
 		
-		$playerStats = new PlayerStatistics( $_COOKIE['pid'], $year );
+		$playerStats = new PlayerStatistics( $p_id, $year );
+		$player = $Core->getUserNameByID($p_id);
 		
-		$Page->setSection( $Page->Title, $Template->Skin['users']->leaderboardTableHeader($year . " Statistics", $playerStats->outputAllLeaderboardRows()) );
+		$Page->setSection( $Page->Title, $Template->Skin['users']->leaderboardTableHeader("\"{$player}\" {$year} Statistics", $playerStats->outputAllLeaderboardRows()) );
 		
 	}
 	
@@ -270,28 +329,15 @@ class User_Handler extends Page_Handler
 		$db = Database::getInstance();
 		$SQL = $db->getConnection();
 		$Page = Page::getInstance();
-		
-		if( empty( $_POST['firstName'] ) )
-		{
-			$Page->setAlert( "Oh No!", "First Name Can't Be Empty!", 2 );
-			return;
-		}
-		if( empty( $_POST['lastName'] ) )
-		{
-			$Page->setAlert( "Oh No!", "Last Name Can't Be Empty!", 2 );
-			return;
-		}
 		if( empty( $_POST['email'] ) )
 		{
 			$Page->setAlert( "Oh No!", "Email Can't Be Empty!", 2 );
 			return;
 		}
 		
-		$query = $SQL->query("UPDATE `players` SET `firstName` = '" . $SQL->escape_string( $_POST['firstName'] ) . "',
-																				`lastName` = '" . $SQL->escape_string( $_POST['lastName'] ) . "',
-																				`email` = '" . $SQL->escape_string( $_POST['email'] ) . "',
+		$query = $SQL->query("UPDATE `players` SET	`email` = '" . $SQL->escape_string( $_POST['email'] ) . "',
 																				`phone` = '" . $SQL->escape_string( $_POST['phone'] ) . "'
-																				WHERE `id` = '" . $_COOKIE['pid'] . "'
+																				WHERE `id` = '" . CMS_Core::getInstance()->User->id . "'
 										");
 										
 		if( $query )
@@ -300,7 +346,7 @@ class User_Handler extends Page_Handler
 		}
 		else
 		{
-			$Page->setAlert( "Oh No!", "Something went wrong and your profile didn't update!<br><pre>" . $SQL->error . "</pre>", 2 );
+			$Page->setAlert( "Oh No!", "Something went wrong and your profile didn't update!", 2 );
 		}
 		
 	}
@@ -311,6 +357,7 @@ class User_Handler extends Page_Handler
 		$db = Database::getInstance();
 		$SQL = $db->getConnection();
 		$Page = Page::getInstance();
+		$Core = CMS_Core::getInstance();
 		
 		if( empty( $_POST['template_id'] ) )
 		{
@@ -318,9 +365,19 @@ class User_Handler extends Page_Handler
 			return;
 		}
 		
+		if( !Template::isTemplate($_POST['template_id']) )
+		{
+			$Page->setAlert( "Oh No!", "That is not a valid template!", 2 );
+			return;
+		}
+		
 		$query = $SQL->query("UPDATE `player_settings` SET `template_id` = '" . $SQL->escape_string( $_POST['template_id'] ) . "'
-																			WHERE `player_id` = '" . $_COOKIE['pid'] . "'
+																			WHERE `player_id` = '" . $Core->User->id . "'
 										");
+		
+		$Core->User->Settings['template_id'] = $_POST['template_id'];
+		
+		$Template = Template::getInstance();
 										
 		if( $query )
 		{
@@ -328,7 +385,7 @@ class User_Handler extends Page_Handler
 		}
 		else
 		{
-			$Page->setAlert( "Oh No!", "Something went wrong and your settings didn't update!<br><pre>" . $SQL->error . "</pre>", 2 );
+			$Page->setAlert( "Oh No!", "Something went wrong and your settings didn't update!", 2 );
 		}
 		
 	}
@@ -341,11 +398,12 @@ class User_Handler extends Page_Handler
 		$db = Database::getInstance();
 		$SQL = $db->getConnection();
 		$Page = Page::getInstance();
+		$Core = CMS_Core::getInstance();
 		
 		foreach( $_POST['message'] as $msg_id )
 		{
-			$query = $SQL->query("UPDATE `player_mail` SET `unread` = {$_POST['mark']} WHERE `receiver_id` = '{$_COOKIE['pid']}' AND `id` = '{$msg_id}'");
-			if(!$query) $Page->setAlert( "Oh No!", "Some messages could not be marked!<br><pre>" . $SQL->error . "</pre>", 2 );
+			$query = $SQL->query("UPDATE `player_mail` SET `unread` = " . $SQL->real_escape_string( $_POST['mark'] ) . " WHERE `receiver_id` = '{$Core->User->id}' AND `id` = '" . $SQL->real_escape_string( $msg_id ) . "'");
+			if(!$query) $Page->setAlert( "Oh No!", "Some messages could not be marked!", 2 );
 		}
 	
 	}
@@ -358,9 +416,10 @@ class User_Handler extends Page_Handler
 		$Page = Page::getInstance();
 		$Core = CMS_Core::getInstance();
 		
-		if( empty( $_POST['to'] ) )
+		if( !isset( $_POST['to'] ) )
 		{
 			$Page->setAlert( "Oh No!", "You must have a recipient!", 2 );
+			$this->_getComposeForm();
 			return;
 		}
 		if( empty( $_POST['subject'] ) )
@@ -370,24 +429,34 @@ class User_Handler extends Page_Handler
 		if( empty( $_POST['message'] ) )
 		{
 			$Page->setAlert( "Oh No!", "You must enter a message!", 2 );
+			$this->_getComposeForm();
 			return;
 		}
+
+		$to = implode($_POST['to'], ",");
 		
-		$query = $SQL->query("INSERT INTO `player_mail` VALUES (null,
-																'" . $SQL->escape_string( $_POST['to'] ) . "',
-																'" . $SQL->escape_string( $Core->User->getID() ) . "',
+		$error = 0;
+		foreach($_POST['to'] as $uid)
+		{
+			$query = $SQL->query("INSERT INTO `player_mail` VALUES (null,
+																'" . $SQL->escape_string( $uid ) . "',
+																'" . $SQL->escape_string( $to ) . "',
+																'" . $SQL->escape_string( $Core->User->id ) . "',
 																'1',
 																'" . $SQL->escape_string( $_POST['subject'] ) . "',
 																'" . $SQL->escape_string( $_POST['message'] ) . "');
 							");
+			if(!$query)
+				$error = 1;
+		}
 										
-		if( $query )
+		if( !$error )
 		{
 			$Page->setAlert( "Success!", "Message Sent!!" );
 		}
 		else
 		{
-			$Page->setAlert( "Oh No!", "Message was unable to send!<br><pre>" . $SQL->error . "</pre>", 2 );
+			$Page->setAlert( "Oh No!", "Message was unable to send!", 2 );
 		}
 		
 	}
@@ -415,7 +484,7 @@ class User_Handler extends Page_Handler
 		}
 		else
 		{
-			$Page->setAlert( "Oh No!", "Some messages could not be deleted!<br><pre>" . $SQL->error . "</pre>", 2 );
+			$Page->setAlert( "Oh No!", "Some messages could not be deleted!", 2 );
 		}
 		
 	}

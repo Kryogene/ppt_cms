@@ -50,7 +50,7 @@ class Venue
 	
 	protected function _setTimeAndDays()
 	{
-		$days = explode("|", $this->_Data['day']);
+		$days = explode("|", $this->_Data['weekday']);
 		$times = explode("|", $this->_Data['startTime']);
 		if( isset($days[1]) )
 			foreach( $days as $k => $d )
@@ -60,10 +60,10 @@ class Venue
 			}
 		else
 		{
-			if( $this->_Data['day'] == "" ) return;
-			$this->days[$this->_Data['day']] = 1;
-			$this->times[$this->_Data['day']] = $this->_Data['startTime'];
-			$this->day = $this->_Data['day'];
+			if( $this->_Data['weekday'] == "" ) return;
+			$this->days[$this->_Data['weekday']] = 1;
+			$this->times[$this->_Data['weekday']] = $this->_Data['startTime'];
+			$this->day = $this->_Data['weekday'];
 			$this->time = $this->_Data['startTime'];
 		}
 	}
@@ -186,8 +186,8 @@ class Venue
 		if((strpos(strtolower($this->zipCode), strtolower($string)) !== false)) return true;
 		if((strpos(strtolower($this->state), strtolower($string)) !== false)) return true;
 		if((strpos(strtolower($this->phone), strtolower($string)) !== false)) return true;
-		if((strpos(strtolower($this->long_desc), strtolower($string)) !== false)) return true;
-		if((strpos(strtolower($this->_featuresTxt()), strtolower($string)) !== false)) return true;
+		//if((strpos(strtolower($this->long_desc), strtolower($string)) !== false)) return true;
+		if((strpos(strtolower($this->_featureTxt()), strtolower($string)) !== false)) return true;
 		return false;
 	}
 			

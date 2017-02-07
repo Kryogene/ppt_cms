@@ -191,10 +191,10 @@ class PlayerStatistics
 		}
 	}
 	
-	public function outputLeaderboardRow( $m = "" )
+	public function outputLeaderboardRow( $m = -1 )
 	{
 		
-		if(empty($m)) $m = $this->month - 1;
+		if($m == -1) $m = $this->month - 1;
 		
 		$Core = CMS_Core::getInstance();
 		$Template = Template::getInstance();
@@ -202,6 +202,7 @@ class PlayerStatistics
 		{
 			$this->Statistic[$mk]['user'] = CMS_Core::getInstance()->getUsernameByID( $this->pid );
 		}
+
 		$HTML = $Template->Skin['leaderboard']->searchRow( $this->Statistic[$m] );
 
 		return $HTML;

@@ -24,9 +24,7 @@ class Leaderboard_Handler extends Page_Handler
 	public function GetHandler()
 	{
 		
-		if( isset( $_GET['id'] ) )
-			$this->_getTournamentQueriesSection();
-		elseif( isset( $_GET['register'] ) )
+		if( isset( $_GET['register'] ) )
 			$this->_getRegisterSection();
 		else
 			$this->_getSearchLeaderboardSection();
@@ -85,11 +83,14 @@ class Leaderboard_Handler extends Page_Handler
 		$leaderboard = new Leaderboard();
 		$leaderboard->limit = (isset($_GET['limit'])) ? $_GET['limit'] : 30;
 		$leaderboard->offset = (isset($_GET['offset'])) ? $_GET['offset'] : 0;
+		
 		if(isset($_GET['month']))
 		{
 			if(is_numeric($_GET['month']))
 				if($_GET['month'] > 0 && $_GET['month'] < 13)
+				{
 					$leaderboard->month = $_GET['month'];
+				}
 		}
 		else
 		{

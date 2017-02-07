@@ -53,7 +53,7 @@ class Venues_Handler extends Page_Handler
 			$day = ( !is_numeric($_GET['day']) ) ? $Core->getDay( $_GET['day'] ) : $_GET['day'];
 		else
 			$day = 0;
-		$orderBy = ( isset($_GET['orderBy']) ) ? "ORDER BY `" . addslashes( $_GET['orderBy'] ) . "`" : "ORDER BY `day`";
+		$orderBy = ( isset($_GET['orderBy']) ) ? "ORDER BY `" . addslashes( $_GET['orderBy'] ) . "`" : "ORDER BY `weekday`";
 		$order = ( isset($_GET['order']) ) ? $_GET['order'] : "ASC";
 		$order = (strtolower($order) == "desc") ? "DESC" : "ASC";
 		return array(	'search'	=> $search, 
@@ -116,10 +116,16 @@ class Venues_Handler extends Page_Handler
 		$html = $Template->Skin['search']->searchVenue( $search_data );
 		
 		$venues_by_day = $this->_getVenueQueries( $search_data );
+		
+		if(empty($venues_by_day))
+			$html .= $Template->Skin['venues']->noResults();
 
 		foreach( $venues_by_day as $day => $val )
 		{
-			$html .= $Template->Skin['venues']->venueCardCategory( $Core->Day[$day], $val );
+			if(!empty(trim($val)))
+				$html .= $Template->Skin['venues']->venueCardCategory( $Core->Day[$day], $val );
+			else
+				$html .= $Template->Skin['venues']->venueCardCategory( $Core->Day[$day], "No Results Found!" );
 		}
 		
 		$Page->setSection( $Page->Title, $html );
@@ -150,8 +156,8 @@ class Venues_Handler extends Page_Handler
 	
 	private function _getQuery( $search_data )
 	{
-	
-		return "SELECT * FROM `venues` WHERE `day` LIKE '%{$search_data['day']}%' {$search_data['orderBy']} {$search_data['order']}";
+
+		return "SELECT * FROM `venues` WHERE `weekday` LIKE '%{$search_data['day']}%' {$search_data['orderBy']} {$search_data['order']}";
 
 	}
 	
@@ -175,10 +181,10 @@ class Venues_Handler extends Page_Handler
 					$day[$search_data['day']] .= $venue->searchRowCard();
 				else
 					if( $venue->contains( $search_data['search'] ) )
-					$day[$search_data['day']] .= $venue->searchRowCard();
+						$day[$search_data['day']] .= $venue->searchRowCard();
 			}
 		else
-			$day[$search_data['day']] = "No Results";
+			$day[$search_data['day']] = "No Results Found!";
 				
 		return $day;
 	}
@@ -194,8 +200,10 @@ class Venues_Handler extends Page_Handler
 		foreach( $Core->Day as $key => $value )
 		{
 				$search_data['day'] = $key;
+
 				$query = $SQL->query($this->_getQuery( $search_data ));
 				$day[$key] = "";
+
 				if($query->num_rows > 0)
 					while($results = $query->fetch_assoc())
 					{

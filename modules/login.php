@@ -95,6 +95,8 @@ class Login
 		
 			self::unsetMemberCookies();
 			
+			//echo "id: " . $id . "|hash: " . $hash . "|";
+			
       setcookie("pid", $id, time() + (3600 * 72), '/');
 			setcookie("hash", $hash, time() + (3600 * 72), '/');
 			
@@ -136,10 +138,12 @@ class Login
 			
 			if( empty( $_POST['password'] ) ) throw new Exception( "You must enter a password!" );
 			
+			$password = md5( md5($_POST['password']) + md5(CMS_CORE::$hash) );
+			
 			$query = $SQL->query("SELECT *
 																FROM `players`
 																WHERE `email` = '" . $SQL->escape_string( $_POST['email'] ) . "' AND
-																`password` = '" . $SQL->escape_string( $_POST['password'] ) . "'
+																`password` = '" . $SQL->escape_string( $password ) . "'
 															");
 														
 			if($query->num_rows == 0)
@@ -171,8 +175,22 @@ class Login
 		public static function registrationSection()
 		{
 			$Template = Template::getInstance();
-			$temp = $Template->Skin['registration']->haveLoginLink();
-			$temp .= $Template->Skin['registration']->registrationForm();
+
+			$_Data['firstName'] = "";
+			$_Data['lastName'] = "";
+			$_Data['email'] = "";
+			$_Data['password'] = "";
+			$_Data['password2'] = "";
+			$_Data['phone'] = "";
+			$_Data['day'] = "";
+			$_Data['month'] = "";
+			$_Data['year'] = "";
+
+			$_Types = array("text", "text", "text", "password", "password", "text", "num_day", "month", "year");
+			$form = $Template->convertToForm($_Data,  $_Types);
+			
+			$temp = $Template->Skin['login']->haveLoginLink();
+			$temp .= $Template->Skin['login']->registrationForm($form);
 			return $temp;
 		}
 		
@@ -180,15 +198,31 @@ class Login
 		{
 			$Template = Template::getInstance();
 			$tmp = "";
-			if(!isset($_POST['submit_login']))
-			{
+
 				$tmp .= $Template->Skin['login']->createAccountLink();
 				$tmp .= $Template->Skin['login']->sectionLoginForm();
-			}else{
-				$tmp .= "You have already logged in!";
-			}
+
 			return $tmp;
 		}
+	
+		public static function loggedInMsg()
+		{
+			$Template = Template::getInstance();
+			$tmp = $Template->Skin['login']->loggedIn();
+			return $tmp;
+		}
+	
+	public static function recoveryForm()
+	{
+		$Template = Template::getInstance();
+		return $Template->Skin['login']->recovery_form();
+	}
+	
+	public static function passwordRecovery()
+	{
+		$Template = Template::getInstance();
+		return $Template->Skin['login']->password_recovery_form($_GET['recovery_hash']);
+	}
 			
 	
 }

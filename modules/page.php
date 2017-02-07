@@ -42,7 +42,7 @@ class Page
 		$Core = CMS_Core::getInstance();
 	
 		// If Global Query p is set then set 'page' to value; else set value to 0.
-		$page = isset( $_GET['p'] ) ? $_GET['p'] : $this->getPageNameByID($Core->Settings['defaultPage']);
+		$page = isset( $_GET['p'] ) ? $_GET['p'] : $this->getDefaultPage();
 		$this->DEBUG[] = "Page \"" . $page . "\" Initializing...";
 		// Get Page Settings.
 		if(!$this->_getData(htmlspecialchars($page))) 
@@ -54,7 +54,6 @@ class Page
 		}
 		else
 			$this->DEBUG[] = "Page Data Successfully Set.";
-
 		// Get Page Handlers.
 		if(!$this->_getHandlers())
 		{
@@ -130,7 +129,7 @@ class Page
 
 		if($query->num_rows == 0)
 		{
-			header("Location: index.php?p=" . $Core->Settings['defaultPage'] );
+			header("Location: index.php?p=" . $this->getDefaultPage() );
 		}
 		
 		$this->_Data = $query->fetch_assoc();
@@ -147,6 +146,7 @@ class Page
 		$this->ID = $this->_Data['id'];
 		$this->Title = $this->_Data['title'];
 		$this->Description = $this->_Data['description'];
+		$this->Status = $this->_Data['online'];
 		$this->Restricted = $this->_Data['user_restriction'];
 		$this->Type = $this->_Data['type'];
 		$this->Image = $this->_Data['image'];
@@ -166,30 +166,38 @@ class Page
 			$handlerObj = DEFAULT_PAGE_HANDLER_OBJECT;
 		}
 
-		try
-		{
+		//try
+		//{
 			$this->_Handlers = new $handlerObj;
-		}
-		catch(Exception $e)
-		{
-			$this->DEBUG[]  = $e->getMessage();
-			return false;
-		}
+		//}
+		//catch(Exception $e)
+		//{
+		//	$this->DEBUG[]  = $e->getMessage();
+		//	return false;
+		//}
 
 		return true;
 	}
 	
-	public function firePresetHandlers()
+	public function run()
 	{
-
-		if(!$this->_Handlers->Restricted())
+		
+		if($this->Status == 0)
 		{
-			$this->_Handlers->SectionHandler();
-			$this->_Handlers->PostHandler();
-			$this->_Handlers->GetHandler();
+			$this->setOfflineSection();
+			return;
 		}
-		else
+		if($this->_Handlers->Restricted())
+		{
 			$this->setRestrictedSection();
+			$this->DEBUG[] = $this->_Handlers->DEBUG;
+			return;
+		}
+
+		$this->_Handlers->SectionHandler();
+		$this->_Handlers->PostHandler();
+		$this->_Handlers->GetHandler();
+
 		
 		$this->DEBUG[] = $this->_Handlers->DEBUG;
 		
@@ -224,6 +232,15 @@ class Page
 		
 	}
 	
+	public function setOfflineSection()
+	{
+		$Template = Template::getInstance();
+		
+		$this->setAlert( "Offline!", "This section is offline for maintenance!", 2);
+		
+		$this->setSection( "Well Then...", "This is embarrassing! Please try coming back in another 10 minutes!" );
+	}
+	
 	public function setAlert( $title, $content, $type = 0 )
 	{
 		//$alertID = ( !is_array( $this->_Alerts ) ? 0 : $this->_Alerts.length();
@@ -244,7 +261,7 @@ class Page
 		
 	public function getDefaultOutput()
 	{
-		return $this->_Data['page_default_content'];
+		return htmlspecialchars_decode($this->_Data['page_default_content']);
 	}
 	
 	public function getSubPageInfo( $call )
@@ -264,6 +281,18 @@ class Page
 		$SQL = $db->getConnection();
 		
 		$q_str = "SELECT name FROM `pages` WHERE `id` = '{$id}'";
+		$query = $SQL->query($q_str);
+		$result = $query->fetch_row();
+		$page = $result[0];
+		return $page;
+	}
+	
+	public function getDefaultPage()
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		
+		$q_str = "SELECT `name` FROM `pages` WHERE `default` = '1'";
 		$query = $SQL->query($q_str);
 		$result = $query->fetch_row();
 		$page = $result[0];

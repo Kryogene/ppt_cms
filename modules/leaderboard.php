@@ -25,17 +25,6 @@ class Leaderboard
 		
 		$Core->DEBUG[] = $this->DEBUG;
 	}
-
-	
-	protected function _getTournamentByID( $id )
-	{
-		$db = Database::getInstance();
-		$SQL = $db->getConnection();
-		
-		$query = $SQL->query("SELECT * FROM `tournaments` WHERE `id` = '" . $SQL->real_escape_string( $id ) . "'");
-		if($query) return $query->fetch_assoc();
-		else return 0;
-	}
 	
 	protected function _setLeaderboardData()
 	{
@@ -59,7 +48,11 @@ class Leaderboard
 				//$player->getOutputByMonth($this->_Data);
 
 			}
-			
+		}
+		else
+		{
+			for($i = 0; $i < 12; $i++)
+				$this->_Data[$i] = null;
 		}
 		
 	}
@@ -187,7 +180,7 @@ class Leaderboard
 		$html = "";	
 
 		if(!isset($this->_Data[$this->month - 1]))
-			return $Template->Skin['leaderboard']->leaderboardTable("Leaderboard", $Template->Skin['leaderboard']->noResults());
+			return $Template->Skin['leaderboard']->leaderboardTable($Core->Month[$this->month], $Template->Skin['leaderboard']->noResults());
 			
 			if($this->month != -1)
 			{
@@ -196,10 +189,14 @@ class Leaderboard
 					$this->searchResults();
 				$this->limitResults($this->_Data[$this->month - 1]);
 				
-				foreach($this->_Data[$this->month - 1] as $v)
+				if(empty($this->_Data[$this->month - 1]))
+					$html = $Template->Skin['leaderboard']->noResults();
+				else
 				{
-					
-					$html .= $v->outputLeaderboardRow($this->month-1);
+					foreach($this->_Data[$this->month - 1] as $v)
+					{
+						$html .= $v->outputLeaderboardRow($this->month-1);
+					}
 				}
 			}
 			else
@@ -215,7 +212,7 @@ class Leaderboard
 					}
 				}
 			}
-		return $Template->Skin['leaderboard']->leaderboardTable("Leaderboard", $html, $this->_calcLinks());
+		return $Template->Skin['leaderboard']->leaderboardTable($Core->Month[$this->month], $html, $this->_calcLinks());
 	}
 	
 	private function _calcLinks()

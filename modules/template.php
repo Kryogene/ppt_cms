@@ -28,9 +28,9 @@ class Template
 		$Core = CMS_Core::getInstance();
 		$this->DEBUG[] = "Templates Initializing...";
 
-		$this->id = ((isset($_COOKIE['template_id']) && is_numeric($_COOKIE['template_id'])) ? $_COOKIE['template_id'] : $Core->Settings['defaultTemplate']);
+		$this->id = (isset($Core->User->Settings['template_id'])) ? $Core->User->Settings['template_id'] : Template::defaultTemplate();
 		
-		$this->_setCookies();
+		$this->_setCookies($this->id);
 		
 		$this->_getData();
 		
@@ -47,18 +47,20 @@ class Template
 		$this->loadSkin("login");
 		$this->loadSkin("users");
 		$this->loadSkin("search");
-		$this->loadSkin("registration");
+		//$this->loadSkin("registration");
 		
 	}
 	
-	protected function _setCookies()
+	protected function _setCookies($t_id = 0)
 	{
 	
+		if($t_id == 0) $t_id = Template::defaultTemplate();
+		
 		$this->DEBUG[] = "Creating Template Cookie(s)...";
 
-            setcookie("template_id", 1, time() + (3600 * 72), '/');
-            $_COOKIE['template_id'] = 1;
-			$this->id = 1;
+      setcookie("template_id", $t_id, time() + (3600 * 72), '/');
+      $_COOKIE['template_id'] = $t_id;
+			$this->id = $t_id;
 		
 		$this->DEBUG[] = "Cookies Created!";
 
@@ -92,6 +94,11 @@ class Template
 		
 	}
 	
+	public function getStyleSheet()
+	{
+		return TEMPLATES_DIR . $this->_Data['directory'] . $this->_Data['stylesheet'];
+	}
+	
 	public function loadSkin($suffix)
 	{
 	
@@ -116,6 +123,7 @@ class Template
 			$this->DEBUG[] = "\"" . $page . "\" Successfully Included!";
 			
 			$skinObj = SKIN_PREFIX . $suffix;
+			if(isset($this->Skin[$suffix])) unset($this->Skin[$suffix]); 
 			$this->Skin[$suffix] = new $skinObj;
 			$this->DEBUG[] = "\"" . $suffix . "\" Added To Skin List.";
 		}
@@ -131,10 +139,13 @@ class Template
 		foreach($files as $file)
 		{
 			$destruct = explode(".", $file);
-			$skin = explode( SKIN_PREFIX , $destruct[0] );
-			if( strtolower($skin[1]) == strtolower($name) )
+			if($destruct[1] != "css")
 			{
-				return TRUE;
+				$skin = explode( SKIN_PREFIX , $destruct[0] );
+				if( strtolower($skin[1]) == strtolower($name) )
+				{
+					return TRUE;
+				}
 			}
 		}
 		return FALSE;
@@ -152,7 +163,7 @@ class Template
 			
 			$elementOne = $this->Skin['login']->loginNavigationForm();
 		//Element Two
-		$elementTwo = $this->Skin['globals']->socialLinksWithIcons();
+		$elementTwo = $this->Skin['globals']->socialLinksWithIcons($Core->Settings);
 		}
 		else
 		{
@@ -166,6 +177,8 @@ class Template
 					
 			if( is_a( $Core->User, "Administrator" ) )
 				$elementTwo .= $this->Skin['users']->navigationAdminIcon();
+			
+			$elementTwo = $this->Skin['globals']->navigationRight($elementTwo);
 				
 		}
 		
@@ -236,7 +249,70 @@ class Template
 		}
 		return $html;
 	}
+	
+	public function convertToForm( $data, $types)
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		$builder = new FormBuilder( $this, $SQL );
+		return $builder->buildByType($data, $types);
+	}
+	
+	public static function isTemplate($t_id)
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		
+		$q_str = "SELECT `id` FROM `templates` WHERE `id` = '" . $SQL->real_escape_string($t_id) . "'";
+		$query = $SQL->query($q_str);
+		if($query->num_rows > 0)
+			return TRUE;
+		else
+			return FALSE;
+	}
 			
+	public static function getAllTemplates()
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		
+		$q_str = "SELECT id, name FROM `templates` ORDER BY name ASC";
+		$query = $SQL->query($q_str);
+		if($query->num_rows > 0)
+		{
+			$arr = array();
+			while($results = $query->fetch_assoc())
+				$arr[$results['id']] = $results['name'];
+			return $arr;
+		}
+		else
+			return 0;
+	}
+	
+	public static function defaultTemplate()
+	{
+		$db = Database::getInstance();
+		$SQL = $db->getConnection();
+		
+		$q_str = "SELECT `id` FROM `templates` WHERE `default` = '1'";
+		$query = $SQL->query($q_str);
+		if($query->num_rows > 0)
+		{
+			$result = $query->fetch_row();
+			return $result[0];
+		}
+		else
+			return 1;
+	}
+	
+	public function changeTemplate($t_id)
+	{
+		$Core = CMS_Core::getInstance();
+		
+		$this->_setCookies($t_id);
+				
+		header( "Location: " . $Core->Settings['defaultURL'] . "/index.php?" . http_build_query($_GET) );
+	}
 	
 }
 
