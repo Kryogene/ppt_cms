@@ -63,7 +63,6 @@ HTML;
 			<div class="searchBox">
 				Search: <input type="text" name="search" value="{$search_data['search']}">
 				<select name="month">
-					<option value="all">All</option>
 					{$search_data['monthOpt']}
 				</select>
 				<input type="submit" value="Search">

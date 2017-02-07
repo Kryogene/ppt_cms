@@ -11,6 +11,7 @@ class sk_leaderboard
 	function leaderboardTable($title, $val, $nav="")
 	{
 		$html = <<<EOF
+
 							<span class="title">{$title}</span>
 						<table class='leaderboardTable'>
 						<tr>

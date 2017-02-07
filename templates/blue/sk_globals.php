@@ -119,7 +119,7 @@ HTML;
 		</nav>
 HTML;
 		return $HTML;
-	}	
+	}
 	
 	public function navigationRight($elements)
 	{
@@ -130,7 +130,6 @@ HTML;
 HTML;
 		return $HTML;
 	}
-	
 	
 	public function bodyHeader()
 	{
@@ -235,17 +234,17 @@ HTML;
 		return $HTML;
 	}
 	
-	public function socialLinksWithIcons()
+	public function socialLinksWithIcons($links)
 	{
 		$HTML = <<<HTML
 			<div class='socialLinks' id='socialIcons'>
 			
 				<!-- Social Icons -->
 				
-					<a href="http://www.facebook.com" target="_blank"><img src='images/templates/default/icons/social/Facebook.png' alt="Facebook" title="Facebook"></a>&nbsp;
-					<a href="http://plus.google.com" target="_blank"><img src='images/templates/default/icons/social/GooglePlus.png' alt="Google Plus" title="Google Plus"></a>&nbsp;
-					<a href="http://www.youtube.com" target="_blank"><img src='images/templates/default/icons/social/Youtube.png' alt="YouTube" title="YouTube"></a>&nbsp;
-					<a href="http://www.twitter.com" target="_blank"><img src='images/templates/default/icons/social/Twitter.png' alt="Twitter" title="Twitter"></a>&nbsp;
+					<a href="{$links['facebook']}" target="_blank"><img src='images/templates/default/icons/social/Facebook.png' alt="Facebook" title="Facebook"></a>&nbsp;
+					<a href="{$links['googlePlus']}" target="_blank"><img src='images/templates/default/icons/social/GooglePlus.png' alt="Google Plus" title="Google Plus"></a>&nbsp;
+					<a href="{$links['youTube']}" target="_blank"><img src='images/templates/default/icons/social/Youtube.png' alt="YouTube" title="YouTube"></a>&nbsp;
+					<a href="{$links['twitter']}" target="_blank"><img src='images/templates/default/icons/social/Twitter.png' alt="Twitter" title="Twitter"></a>&nbsp;
 
 				
 			</div>
@@ -253,7 +252,7 @@ HTML;
 		return $HTML;
 	}
 	
-	public function bodyFooter()
+	public function bodyFooter($links)
 	{
 		$HTML = <<<HTML
 		<!-- The Sites Footer Section -->
@@ -271,10 +270,10 @@ HTML;
 			
 				<!-- Social Icons -->
 				
-					<a href="http://www.facebook.com" target="_blank"><img src='images/templates/default/icons/social/Facebook.png' alt="Facebook" title="Facebook"></a>&nbsp;
-					<a href="http://plus.google.com" target="_blank"><img src='images/templates/default/icons/social/GooglePlus.png' alt="Google Plus" title="Google Plus"></a>&nbsp;
-					<a href="http://www.youtube.com" target="_blank"><img src='images/templates/default/icons/social/Youtube.png' alt="YouTube" title="YouTube"></a>&nbsp;
-					<a href="http://www.twitter.com" target="_blank"><img src='images/templates/default/icons/social/Twitter.png' alt="Twitter" title="Twitter"></a>&nbsp;
+					<a href="{$links['facebook']}" target="_blank"><img src='images/templates/default/icons/social/Facebook.png' alt="Facebook" title="Facebook"></a>&nbsp;
+					<a href="{$links['googlePlus']}" target="_blank"><img src='images/templates/default/icons/social/GooglePlus.png' alt="Google Plus" title="Google Plus"></a>&nbsp;
+					<a href="{$links['youTube']}" target="_blank"><img src='images/templates/default/icons/social/Youtube.png' alt="YouTube" title="YouTube"></a>&nbsp;
+					<a href="{$links['twitter']}" target="_blank"><img src='images/templates/default/icons/social/Twitter.png' alt="Twitter" title="Twitter"></a>&nbsp;
 
 				
 			</div>

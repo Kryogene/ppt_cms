@@ -119,7 +119,7 @@ HTML;
 		</nav>
 HTML;
 		return $HTML;
-	}	
+	}
 	
 	public function navigationRight($elements)
 	{
